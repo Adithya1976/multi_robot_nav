@@ -9,6 +9,8 @@ from torch import nn
 from pathlib import Path
 from rl.policy_train.multi_ppo import multi_ppo
 from rl.policy.actor_critic import ActorCritic
+import matplotlib
+matplotlib.use('Agg')
 
 # path set
 cur_path = Path(__file__).parent
@@ -52,7 +54,7 @@ par_policy.add_argument('--hidden_sizes_v', type=tuple, default=(256, 256))  # 1
 par_policy.add_argument('--activation', default=nn.ReLU)
 par_policy.add_argument('--output_activation', default=nn.Tanh)
 par_policy.add_argument('--output_activation_v', default=nn.Identity) 
-par_policy.add_argument('--mode', default='BiGRU')   # LSTM
+par_policy.add_argument('--mode', default='SetTransformer')   # LSTM
 
 par_train = parser.add_argument_group('par train', 'train parameters') 
 par_train.add_argument('--pi_lr', type=float, default=4e-6)
@@ -105,7 +107,7 @@ policy = ActorCritic(env.observation_space, env.action_space, args.state_dim, ar
                     args.hidden_sizes_ac, args.hidden_sizes_v, args.activation, args.output_activation, 
                     args.output_activation_v, args.device, args.mode, args.drop_p)
 
-ppo = multi_ppo(env, policy, args.pi_lr, args.vf_lr, args.train_epoch, args.steps_per_epoch, args.max_ep_len, args.gamma, args.lam, args.clip_ratio, args.train_pi_iters, args.train_v_iters, args.target_kl, args.render, args.render_freq, args.con_train,  args.seed, args.save_freq, args.save_figure, model_abs_path, model_name, load_fname, args.device, args.reset_mode, args.save_result, counter, test_env, args.lr_decay_epoch, args.max_update_num, args.figure_save_path)
+ppo = multi_ppo(env, policy, args.pi_lr, args.vf_lr, args.train_epoch, args.steps_per_epoch, args.max_ep_len, args.gamma, args.lam, args.clip_ratio, args.train_pi_iters, args.train_v_iters, args.target_kl, args.render, args.render_freq, args.con_train,  args.seed, args.save_freq, args.save_figure, model_abs_path, model_name, load_fname, args.device, args.reset_mode, args.save_result, counter, None, args.lr_decay_epoch, args.max_update_num, args.figure_save_path)
 
 # save hyparameters
 if not os.path.exists(model_abs_path):

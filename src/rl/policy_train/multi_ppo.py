@@ -151,8 +151,7 @@ class multi_ppo:
 
         self.save_result = save_result
         self.counter = counter
-        self.pt = post_train(test_env, reset_mode=reset_mode, inf_print=False, render=False)
-        torch.mps.synchronize()
+        # self.pt = post_train(test_env, reset_mode=reset_mode, inf_print=False, render=False)
 
         self.lr_decay_epoch = lr_decay_epoch
         self.max_update_num = max_update_num
@@ -238,17 +237,17 @@ class multi_ppo:
                     
                     obs_list = self.env.ir_gym.env_observation()
 
-            if (epoch % self.save_freq == 0) or (epoch == self.epoch):
+            if (epoch % self.save_freq == 0) or (epoch == self.epoch) and epoch != 0:
                 self.save_model(epoch) 
 
-                if self.save_result and epoch != 0:
-                # if self.save_result:
-                    policy_model = self.save_path + self.save_name+'_'+str(epoch)+'.pt'
-                    # policy_model = self.save_path + self.save_name+'_'+'check_point_'+ str(epoch)+'.pt'
-                    result_path = self.save_path
-                    policy_name = self.save_name+'_'+str(epoch)
-                    thread = threading.Thread(target=self.pt.policy_test, args=('drl', policy_model, policy_name, result_path, '/results.txt'))
-                    thread.start()
+                # if self.save_result and epoch != 0:
+                # # if self.save_result:
+                #     policy_model = self.save_path + self.save_name+'_'+str(epoch)+'.pt'
+                #     # policy_model = self.save_path + self.save_name+'_'+'check_point_'+ str(epoch)+'.pt'
+                #     result_path = self.save_path
+                #     policy_name = self.save_name+'_'+str(epoch)
+                #     thread = threading.Thread(target=self.pt.policy_test, args=('drl', policy_model, policy_name, result_path, '/results.txt'))
+                #     thread.start()
 
             mean = [round(np.mean(r), 2) for r in ep_ret_list_mean]               
             max_ret = [round(np.max(r), 2) for r in ep_ret_list_mean]   
