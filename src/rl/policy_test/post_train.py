@@ -2,14 +2,15 @@ import torch
 import numpy as np
 from pathlib import Path
 import platform
+from gym_env.envs import mrnav
 from rl.policy.actor_critic import ActorCritic
 from math import pi, sin, cos, sqrt
 import time 
 
 class post_train:
-    def __init__(self, env, num_episodes=100, max_ep_len=150, acceler_vel = 1.0, reset_mode=3, render=True, save=False, neighbor_region=4, neighbor_num=5, args=None, **kwargs):
+    def __init__(self, env, num_episodes=100, max_ep_len=150, acceler_vel = 1.0, reset_mode=3, render=True, save=False, neighbor_region=4, neighbor_num=5, args=None, device='mps', **kwargs):
 
-        self.env = env
+        self.env: mrnav = env
         self.num_episodes=num_episodes
         self.max_ep_len = max_ep_len
         self.acceler_vel = acceler_vel
@@ -30,6 +31,8 @@ class post_train:
         self.nm = neighbor_num
         self.args = args
 
+        self.device = device
+
     def policy_test(self, policy_type='drl', policy_path=None, policy_name='policy', result_path=None, result_name='/result.txt', figure_save_path=None, ani_save_path=None, policy_dict=False, once=False):
         
         if policy_type == 'drl':
@@ -49,7 +52,6 @@ class post_train:
             action_time_list = []
 
             if self.render or self.save:
-                print("SAVING FIGURE")
                 self.env.render(save=self.save, path=figure_save_path, i = figure_id, show_traj=self.show_traj, traj_type=self.traj_type)
             
             if policy_type == 'drl': 
@@ -67,7 +69,7 @@ class post_train:
                     abs_action = self.acceler_vel * a_inc + np.squeeze(cur_vel)
                     abs_action_list.append(abs_action)
 
-            o, r, d, info = self.env.step_ir(abs_action_list, vel_type = 'omni')
+            o, r, d, info = self.env.step_(abs_action_list)
 
             robot_speed_list = [np.linalg.norm(robot.vel_omni) for robot in self.env.ir_gym.robot_list]
             avg_speed = np.average(robot_speed_list)
@@ -90,7 +92,7 @@ class post_train:
                 mean_speed_list.append(speed)
                 speed_list = []
 
-                o, r, d, ep_ret, ep_len = self.env.reset(mode=self.reset_mode), 0, False, 0, 0
+                o, r, d, ep_ret, ep_len = self.env.reset(), 0, False, 0, 0
 
                 n += 1
 
@@ -123,7 +125,7 @@ class post_train:
     def load_policy(self, filename, std_factor=1, policy_dict=False):
 
         if policy_dict == True:
-            model = ActorCritic(self.env.observation_space, self.env.action_space, self.args.state_dim, self.args.dilnet_input_dim, self.args.dilnet_hidden_dim, self.args.hidden_sizes_ac, self.args.hidden_sizes_v, self.args.activation, self.args.output_activation, self.args.output_activation_v, self.args.use_gpu, self.args.dilnet_mode)
+            model = ActorCritic(self.env.observation_space, self.env.action_space, self.args.state_dim, self.args.dilnet_input_dim, self.args.dilnet_hidden_dim, self.args.hidden_sizes_ac, self.args.hidden_sizes_v, self.args.activation, self.args.output_activation, self.args.output_activation_v, self.device, self.args.mode)
         
             check_point = torch.load(filename, map_location=torch.device("mps"))
             model.load_state_dict(check_point['model_state'], strict=True)

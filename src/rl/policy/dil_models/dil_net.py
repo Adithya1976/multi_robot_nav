@@ -24,6 +24,7 @@ class DILNet(nn.Module):
         self.device = device
 
         self.model = model_dict[mode](input_dim, hidden_dim, device)
+        self.model = self.model.to(device)
 
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
@@ -54,7 +55,7 @@ class DILNet(nn.Module):
 
     def obs_list(self, obs_tensor_list):
         
-        mov_len = [(len(obs_tensor)-self.state_dim)/self.input_dim for obs_tensor in obs_tensor_list]
+        mov_lens = [int((len(obs_tensor)-self.state_dim)/self.input_dim) for obs_tensor in obs_tensor_list]
         obs_pad = pad_sequence(obs_tensor_list, batch_first = True)
         robot_state_batch = obs_pad[:, :self.state_dim] 
 
@@ -71,9 +72,21 @@ class DILNet(nn.Module):
 
         re_mov_pad=re_mov_pad.to(self.device)
 
-        dilnet_input = pack_padded_sequence(re_mov_pad, mov_len, batch_first=True, enforce_sorted=False)
-        
-        model_out = self.model(dilnet_input)
+        if self.mode == 'SetTransformer':
+            # Create a key_padding_mask for the padded moving state.
+            # Shape: (batch_size, max_mov_len) with True indicating padded positions.
+            batch_size, max_len, _ = re_mov_pad.size()
+            key_padding_mask = torch.zeros(batch_size, max_len, dtype=torch.bool)
+            for i, l in enumerate(mov_lens):
+                if l < max_len:
+                    key_padding_mask[i, l:] = True
+            key_padding_mask = key_padding_mask.to(self.device)
+            dilnet_input = re_mov_pad  # Use the padded tensor directly.
+            model_out = self.model(dilnet_input, key_padding_mask=key_padding_mask)
+        else:
+            # For other models, use pack_padded_sequence.
+            dilnet_input = pack_padded_sequence(re_mov_pad, mov_lens, batch_first=True, enforce_sorted=False)
+            model_out = self.model(dilnet_input)
         
         fc_obs_batch = torch.cat((robot_state_batch, model_out), 1)
         fc_obs_batch = self.ln(fc_obs_batch)
