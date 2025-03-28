@@ -25,7 +25,7 @@ class mrnav(gym.Env):
         self.ir_gym.robot_step(action, vel_type=vel_type, stop=stop)
         self.ir_gym.obs_cirs_step()
         temp_action_list = [np.squeeze(robot.vel_omni) for robot in self.ir_gym.robot_list]
-        obs_list, mov_reward, done_list, info_list = self.ir_gym.obs_move_reward_list(action, **kwargs)
+        obs_list, mov_reward, done_list, info_list = self.ir_gym.obs_move_reward_list(temp_action_list, **kwargs)
 
         reward_list = [x+y for x, y in zip(rvo_reward_list, mov_reward)]
         
