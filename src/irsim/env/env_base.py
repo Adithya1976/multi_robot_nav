@@ -155,10 +155,12 @@ class EnvBase:
     def _objects_step(self, action: Optional[list] = None):
         action = action + [None] * (len(self.objects) - len(action))
         [obj.step(action) for obj, action in zip(self.objects, action)]
+        [obj.check_status() for obj in self.objects]
 
     def _object_step(self, action: np.ndarray, obj_id: int = 0):
         self.objects[obj_id].step(action)
         [obj.step() for obj in self.objects if obj._id != obj_id]
+        [obj.check_status() for obj in self.objects]
 
     # render
     def render(self, interval: float = 0.05, figure_kwargs=dict(), **kwargs):

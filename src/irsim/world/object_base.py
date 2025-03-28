@@ -20,6 +20,7 @@ from irsim.env.env_plot import linewidth_from_data_units
 from irsim.global_param.path_param import path_manager
 from shapely.strtree import STRtree
 from shapely.geometry import MultiLineString
+import copy
 
 from irsim.util.util import (
     WrapToRegion,
@@ -240,6 +241,8 @@ class ObjectBase:
         self._init_goal = self._goal.copy()
 
         self._geometry = self.gf.step(self.state)
+        self._init_geometry = copy.deepcopy(self._geometry)
+
         self.group = group
 
         # flag
@@ -365,13 +368,14 @@ class ObjectBase:
             self._state = next_state
             self._velocity = behavior_vel
             self._geometry = self.gf.step(self.state)
-            self.sensor_step()
+            # self.sensor_step()
             self.post_process()
-            self.check_status()
+            # self.check_status()
             self.trajectory.append(self.state.copy())
             return next_state
 
     def sensor_step(self):
+        raise NotImplementedError
         """
         Update all sensors for the current state.
         """
@@ -427,6 +431,8 @@ class ObjectBase:
         """
         Check if the object is in collision with others.
         """
+        if self.arrive_flag:
+            return
         collision_flags = []
 
         self.collision_obj = []
@@ -658,11 +664,13 @@ class ObjectBase:
 
         assert self.state.shape == temp_state.shape
 
-        if init:
-            self._init_state = temp_state.copy()
-
         self._state = temp_state.copy()
         self._geometry = self.gf.step(self.state)
+
+        if init:
+            self._init_geometry = copy.deepcopy(self._geometry)
+            self._init_state = temp_state.copy()
+
 
     def set_velocity(self, velocity: Union[list, np.ndarray] = [0, 0], init: bool = False):
         """
@@ -1252,6 +1260,7 @@ class ObjectBase:
         Reset the object to its initial state.
         """
         self._state = self._init_state.copy()
+        self._geometry = copy.deepcopy(self._init_geometry)
         self._goal = self._init_goal.copy()
         self._velocity = self._init_velocity.copy()
 
