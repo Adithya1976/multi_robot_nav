@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 class SetTransformer(nn.Module):
     def __init__(self, dim_input,  dim_output, device=None, num_outputs=1, 
-            num_inds=32, dim_hidden=128, num_heads=4, ln=False):
+            num_inds=32, dim_hidden=256, num_heads=4, ln=False):
         super(SetTransformer, self).__init__()
         self.isab1 = ISAB(dim_input, dim_hidden, num_heads, num_inds, ln=ln)
         self.isab2 = ISAB(dim_hidden, dim_hidden, num_heads, num_inds, ln=ln)
@@ -18,10 +18,10 @@ class SetTransformer(nn.Module):
 
     def forward(self, X, key_padding_mask=None):
         X = self.isab1(X, key_padding_mask=key_padding_mask)
-        X = self.isab2(X, key_padding_mask=key_padding_mask)
-        X = self.pma(X, key_padding_mask=key_padding_mask)
-        X = self.sab1(X, key_padding_mask=key_padding_mask)
-        X = self.sab2(X, key_padding_mask=key_padding_mask)
+        X = self.isab2(X, key_padding_mask=None)
+        X = self.pma(X, key_padding_mask=None)
+        X = self.sab1(X, key_padding_mask=None)
+        X = self.sab2(X, key_padding_mask=None)
         return self.fc(X).squeeze()
     
 class MAB(nn.Module):
@@ -80,7 +80,7 @@ class ISAB(nn.Module):
 
     def forward(self, X, key_padding_mask=None):
         H = self.mab0(self.I.repeat(X.size(0), 1, 1), X, key_padding_mask=key_padding_mask)
-        return self.mab1(X, H, key_padding_mask=key_padding_mask)
+        return self.mab1(X, H)
 
 class PMA(nn.Module):
     def __init__(self, dim, num_heads, num_seeds, ln=False):
