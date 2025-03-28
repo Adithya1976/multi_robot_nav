@@ -54,7 +54,7 @@ par_policy.add_argument('--hidden_sizes_v', type=tuple, default=(256, 256))  # 1
 par_policy.add_argument('--activation', default=nn.ReLU)
 par_policy.add_argument('--output_activation', default=nn.Tanh)
 par_policy.add_argument('--output_activation_v', default=nn.Identity) 
-par_policy.add_argument('--mode', default='SetTransformer')   # LSTM
+par_policy.add_argument('--mode', default='BiGRU')   # LSTM
 
 par_train = parser.add_argument_group('par train', 'train parameters') 
 par_train.add_argument('--pi_lr', type=float, default=4e-6)
