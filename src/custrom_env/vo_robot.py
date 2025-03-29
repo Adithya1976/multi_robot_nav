@@ -16,19 +16,20 @@ class VORobot:
         self.external_objects = external_objects
         self.mode = mode
         self.neighbor_region = neighbor_region
-        self.lidar_range_max = lidar_config_dict["range_limit"]
-        self.lidar_jump_threshold = lidar_config_dict["jump_threshold"]
-        self.lidar_number = lidar_config_dict["number"]
-        self.lidar_angle_min = lidar_config_dict["angle_min"]
-        self.lidar_angle_max = lidar_config_dict["angle_max"]
-        self.lidar_angles = np.linspace(self.lidar_angle_min, self.lidar_angle_max, self.lidar_number)
-        self.lidar = SimulatedLidar2D(
-            range_max=self.lidar_range_max,
-            angle_range=self.lidar_angle_max - self.lidar_angle_min,
-            number=self.lidar_number,
-            external_objects=external_objects
-        )
-    
+        if self.mode == "lidar":
+            self.lidar_range_max = lidar_config_dict["range_limit"]
+            self.lidar_jump_threshold = lidar_config_dict["jump_threshold"]
+            self.lidar_number = lidar_config_dict["number"]
+            self.lidar_angle_min = lidar_config_dict["angle_min"]
+            self.lidar_angle_max = lidar_config_dict["angle_max"]
+            self.lidar_angles = np.linspace(self.lidar_angle_min, self.lidar_angle_max, self.lidar_number)
+            self.lidar = SimulatedLidar2D(
+                range_max=self.lidar_range_max,
+                angle_range=self.lidar_angle_max - self.lidar_angle_min,
+                number=self.lidar_number,
+                external_objects=external_objects
+            )
+        
     def get_perception_info(self, init_vel: bool = False) -> PerceptionInfo:
         state = self.robot.state[0, 0], self.robot.state[1, 0], self.robot.state[2, 0]
         velocity = self.robot.velocity_xy[0, 0], self.robot.velocity_xy[1, 0]

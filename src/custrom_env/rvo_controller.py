@@ -117,6 +117,8 @@ class VOController:
                     obstacle
                 )
                 ext_obs_list.append(ext_obs)
+        else:
+            raise ValueError("Invalid obs_mode")
 
         ext_obs_list.sort(key=lambda x: (-x[-1], x[-2]), reverse=True)           
 
@@ -141,10 +143,6 @@ class VOController:
                                 action: Optional[Tuple] = None,
                                 mode: str="rvo"
         ) -> np.ndarray:
-        result_dict = {
-            "vo_representation": None,
-            "minimum_collision_time": None
-        }
         if action is None:
             action = robot_velocity
 
@@ -163,6 +161,9 @@ class VOController:
 
         dis_mr = sqrt(rel_y**2 + rel_x**2)
         angle_mr = atan2(my - y, mx - x)
+
+        if dis_mr <= r + mr:
+            dis_mr = r + mr
 
         real_dis_mr = np.sqrt(rel_y**2 + rel_x**2)
         
@@ -256,6 +257,11 @@ class VOController:
 
         left_dis = sqrt((left_point[0] - x)**2 + (left_point[1] - y)**2)
         right_dis = sqrt((right_point[0] - x)**2 + (right_point[1] - y)**2)
+
+        if left_dis <= r:
+            left_dis = r
+        if right_dis <= r:
+            right_dis = r
 
         left_half_angle = asin(r / left_dis) if r<left_dis else pi/2
         right_half_angle = asin(r / right_dis) if r<right_dis else pi/2

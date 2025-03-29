@@ -105,12 +105,13 @@ class VOEnv(EnvBase):
             action=action_list
             )
         
+        # Note, the observation of a robot which has collided will be incorrect, must reset and read observation again
+        observation_list = self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
+        
         
         # get collision and arrive flags
         collision_list_flag = [vo_robot.collision for vo_robot in self.vo_robots]
         arrive_list_flag = [vo_robot.arrive for vo_robot in self.vo_robots]
-
-        observation_list = self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
 
         return observation_list, reward_list, collision_list_flag, arrive_list_flag
 

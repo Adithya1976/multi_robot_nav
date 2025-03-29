@@ -52,6 +52,12 @@ class SimulatedLidar2D:
         obj_radius = obj.radius
         obj_angle = math.atan2(obj_state[1, 0] - state[1, 0], obj_state[0, 0] - state[0, 0])
         obj_dist = self.find_dist(state, obj_state)
+
+        if obj_dist <= obj_radius:
+            # This indicates a collision. Note that this reading is now unreliable.
+            # Must reset robot and set previous perception to None
+            return
+
         half_angle = math.asin(obj_radius / obj_dist)
         obj_angle_min = obj_angle - half_angle - state[2, 0]
         obj_angle_max = obj_angle + half_angle - state[2, 0]

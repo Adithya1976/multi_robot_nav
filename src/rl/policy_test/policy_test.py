@@ -1,9 +1,9 @@
 import gym
-from custrom_env.vo_env import VOEnv
 import gym_env
 from pathlib import Path
 import pickle
 import sys
+from custrom_env.vo_env import VOEnv
 from rl.policy_test.post_train import post_train
 import argparse
 import os
@@ -20,7 +20,7 @@ parser.add_argument('--model_name', default='r4_63/r4_63_150.pt')  #   policy_di
 parser.add_argument('--arg_name', default='r4_0/r4_0')
 parser.add_argument('--world_name', default='policy_test_world.yaml')  # policy_test_world_lines.yaml
 parser.add_argument('--render', action='store_true')
-parser.add_argument('--robot_number', type=int, default='4')
+parser.add_argument('--robot_number', type=int, default='5')
 parser.add_argument('--num_episodes', type=int, default='5')
 parser.add_argument('--dis_mode', type=int, default='3')  # 3 circle, 2 random, 5 for corridor
 parser.add_argument('--save', action='store_true')
@@ -45,7 +45,7 @@ if policy_args.policy_type == 'drl':
     fname_model = model_base_path + '/' + policy_args.model_name 
     policy_name = 'drl_rvo'
     
-env = VOEnv('custom_env.yaml', 'lidar')
+env = VOEnv('custom_env.yaml', 'ground_truth')
 
 policy_name = policy_name + '_' + str(policy_args.robot_number) + '_dis' + str(policy_args.dis_mode)
 
