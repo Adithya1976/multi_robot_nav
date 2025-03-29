@@ -1,10 +1,9 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 
 class CircularObstacle:
     def __init__(self, position: Tuple, velocity: Tuple, radius: float):
-        super(CircularObstacle, self).__init__(type="ground_truth")
         self.position = position
         self.velocity = velocity
         self.radius = radius
@@ -19,11 +18,23 @@ class LidarCluster:
         self.velocity = velocity
         
 class PerceptionInfo:
-    def __init__(self, type: str, state: Tuple, velocity: Tuple, radius: float, desired_velocity: Tuple, obstacle_list: List[CircularObstacle] | List[LidarCluster]):
+    def __init__(
+        self, 
+        type: str, 
+        state: Tuple, 
+        velocity: Tuple, 
+        radius: float,
+        arrive: bool,
+        collision: bool, 
+        desired_velocity: Tuple, 
+        obstacle_list: Union[List[CircularObstacle], List[LidarCluster]]
+    ):
         self.type = type
         self.state = state
         self.velocity = velocity
         self.radius = radius
+        self.arrive = arrive
+        self.collision = collision
         self.desired_velocity = desired_velocity
         assert type == "ground_truth" or type == "lidar"
         if type == "ground_truth":

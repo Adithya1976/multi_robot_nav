@@ -15,4 +15,4 @@ robot:
     vel_max: [1.5, 1.5]
     color: ['royalblue', 'red', 'green', 'orange', 'purple', 'yellow', 'cyan', 'magenta', 'lime', 'pink', 'brown'] 
     arrive_mode: 'position'
-    goal_threshold: 0.15
+    goal_threshold: 0.2

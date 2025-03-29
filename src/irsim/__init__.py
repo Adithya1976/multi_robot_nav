@@ -1,4 +1,3 @@
-from .version import __version__
 from irsim.env import EnvBase, EnvBase3D
 import os
 import sys

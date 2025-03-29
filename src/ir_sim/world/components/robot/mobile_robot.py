@@ -133,7 +133,7 @@ class mobile_robot():
         self.vel_diff = vel_diff
         self.diff2omni()
     
-    def omni2diff(self, vel_omni, guarantee_time = 0.2, tolerance = 0.1, mini_speed=0.02):
+    def omni2diff(self, vel_omni, guarantee_time = 0.1, tolerance = 0.1, mini_speed=0.02):
 
         speed = sqrt(vel_omni[0, 0] ** 2 + vel_omni[1, 0] ** 2)
         
@@ -157,6 +157,8 @@ class mobile_robot():
             w = -diff_radians / guarantee_time
             if w > w_max:
                 w = w_max
+            if w < -w_max:
+                w = -w_max
             
         v = speed * cos(diff_radians)
 

@@ -14,23 +14,50 @@ from irsim.world.robots.robot_diff import RobotDiff
 
 
 class VOEnv(EnvBase):
-    def __init__(self, world_name, obs_mode, reward_parameters = (0.3, 1.0, 0.3, 1.2, 0.2, 3.6, 0, 0), neighbor_region=4, neighbor_num=5, **kwargs):
+    def __init__(
+        self, 
+        world_name, 
+        obs_mode, 
+        reward_parameters=(0.3, 1.0, 0.3, 1.2, 0.2, 3.6, 0, 0), 
+        neighbor_region=4, 
+        neighbor_num=5,
+        collision_time_threshold=5,
+        safety_distance=0.2,
+        **kwargs
+    ):
         super(VOEnv, self).__init__(world_name, **kwargs)
         self.obs_mode = obs_mode
+
+        self.neighbor_region = neighbor_region
+        self.neighbor_num = neighbor_num
+        self.collision_time_threshold = collision_time_threshold
+
         # initialise VO robots
         self.vo_robots = self.init_vo_robots()
         # initialise RVO Controller
-        self.rvo_controller = VOController(obs_mode, reward_parameters, neighbor_region, neighbor_num)
+        self.rvo_controller = VOController(
+            obs_mode=obs_mode,
+            reward_parameters=reward_parameters,
+            robot_num=self.robot_number,
+            neighbor_region=neighbor_region,
+            neighbor_num=neighbor_num,
+            collision_time_threshold=collision_time_threshold,
+            safety_distance=safety_distance
+        )
         # initialise perception info
         self.prev_perceptions: List[PerceptionInfo] = None
         self.current_perceptions: List[PerceptionInfo] = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
     
+        self.recieved_goal_rewards = [False for _ in range(self.robot_number)]
+
     def init_vo_robots(self) -> List[VORobot]:
+        vo_robots = []
         for i in range(self.robot_number):
             robot = self.robot_list[i]
-            external_objects = self.object_list[:i] + self.object_list[i+1:]
-            vo_robot = VORobot(robot, external_objects, self.obs_mode)
-            self.vo_robots.append(vo_robot)
+            external_objects = self.objects[:i] + self.objects[i+1:]
+            vo_robot = VORobot(robot, external_objects, self.neighbor_region, self.obs_mode)
+            vo_robots.append(vo_robot)
+        return vo_robots
     
     def step(self, action_list):
 
@@ -52,7 +79,11 @@ class VOEnv(EnvBase):
         self.current_perceptions = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
 
         # get observation and reward
-        reward_list = self.rvo_controller.get_rewards(self.prev_perceptions, action_list)
+        reward_list = self.rvo_controller.get_rewards(
+            perception_info=self.prev_perceptions,
+            recieved_goal_rewards=self.recieved_goal_rewards,
+            action=action_list
+            )
         observation_list = self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
         
         # get collision and arrive flags
@@ -72,6 +103,8 @@ class VOEnv(EnvBase):
         speed = np.sqrt(vx**2 + vy**2)
         vel_radians = math.atan2(vy, vx)
 
+        diff_radians = robot_radians - vel_radians
+
         if speed > vmax:
             speed = vmax
 
@@ -80,7 +113,6 @@ class VOEnv(EnvBase):
         elif diff_radians < -pi:
             diff_radians = diff_radians + 2*pi
         
-        diff_radians = robot_radians - vel_radians
 
         if diff_radians < tolerance and diff_radians > -tolerance:
             w = 0
@@ -99,12 +131,16 @@ class VOEnv(EnvBase):
             v = 0
             w = 0
         
-        return np.array([[v], [w]])
+        vel_diff = np.array([[v], [w]])
+        
+        return vel_diff
 
     def reset(self, id=None, random_ori=False):
         if id is None:
             # reset all the bots
             super(VOEnv, self).reset()
+
+            self.recieved_goal_rewards = [False for _ in range(self.robot_number)]
             
             if random_ori:
                 for robot in self.robot_list:
@@ -117,6 +153,8 @@ class VOEnv(EnvBase):
             # reset a single bot
             self.robot_list[id].reset()
 
+            self.recieved_goal_rewards[id] = False
+
             if random_ori:
                 robot : RobotDiff = self.robot_list[id]
                 # get a random orientation
@@ -126,6 +164,6 @@ class VOEnv(EnvBase):
             
             return None
         
-        self.prev_perception_info = None
-        self.current_perception_info = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
-        return self.rvo_controller.get_observations(self.previous_perception_info, self.current_perception_info)
+        self.prev_perceptions = None
+        self.current_perceptions = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
+        return self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
