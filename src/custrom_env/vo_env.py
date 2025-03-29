@@ -2,7 +2,7 @@ import copy
 from math import atan2, cos, pi
 import math
 from typing import List
-
+from gym import spaces
 import numpy as np
 
 from custrom_env import vo_robot
@@ -14,6 +14,8 @@ from irsim.world.robots.robot_diff import RobotDiff
 
 
 class VOEnv(EnvBase):
+    observation_space = spaces.Box(-np.inf, np.inf, shape=(5,), dtype=np.float32)
+    action_space = spaces.Box(low=np.array([-1, -1]), high=np.array([1, 1]), dtype=np.float32)
     def __init__(
         self, 
         world_name, 
