@@ -1,4 +1,5 @@
 import gym
+from custrom_env.vo_env import VOEnv
 import gym_env
 from pathlib import Path
 import pickle
@@ -14,7 +15,7 @@ os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
 parser = argparse.ArgumentParser(description='policy test')
 parser.add_argument('--policy_type', default='drl')
 parser.add_argument('--model_path', default='policy_train/model_save')
-parser.add_argument('--model_name', default='r4_2/r4_2_250.pt')  #   policy_dict=False    
+parser.add_argument('--model_name', default='r4_63/r4_63_150.pt')  #   policy_dict=False    
 # parser.add_argument('--model_name', default='r4_0/r4_0_check_point_250.pt')  with check point --> policy_dict=True
 parser.add_argument('--arg_name', default='r4_0/r4_0')
 parser.add_argument('--world_name', default='policy_test_world.yaml')  # policy_test_world_lines.yaml
@@ -44,7 +45,7 @@ if policy_args.policy_type == 'drl':
     fname_model = model_base_path + '/' + policy_args.model_name 
     policy_name = 'drl_rvo'
     
-env = gym.make('mrnav-v1', world_name=policy_args.world_name, robot_number=policy_args.robot_number, neighbors_region=args.neighbors_region, neighbors_num=args.neighbors_num, robot_init_mode=policy_args.dis_mode, env_train=False, random_bear=args.random_bear, random_radius=args.random_radius, reward_parameter=args.reward_parameter, goal_threshold=0.2, full=policy_args.full)
+env = VOEnv('custom_env.yaml', 'lidar')
 
 policy_name = policy_name + '_' + str(policy_args.robot_number) + '_dis' + str(policy_args.dis_mode)
 

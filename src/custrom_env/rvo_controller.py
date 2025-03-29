@@ -1,11 +1,9 @@
-from ast import Not
-from calendar import c
-import dis
 from math import asin, atan2, cos, inf, pi, sin, sqrt
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-from custrom_env.perception_info import CircularObstacle, PerceptionInfo
+from custrom_env.perception_info import CircularObstacle, LidarCluster, PerceptionInfo
+import concurrent.futures
 
 
 class VOController:
@@ -30,14 +28,26 @@ class VOController:
             # min_exp_time
             max_inverse_exp_time = 0
             for obstacle in current_perception.obstacle_list:
-                inverse_exp_time = self.get_vo_info_ground_truth(
-                    current_perception.state,
-                    current_perception.velocity,
-                    current_perception.radius,
-                    obstacle,
-                    action[i]
-                )[-1]
-                max_inverse_exp_time = max(max_inverse_exp_time, inverse_exp_time)
+                if self.obs_mode == "ground_truth":
+                    inverse_exp_time = self.get_vo_representation_ground_truth(
+                        current_perception.state,
+                        current_perception.velocity,
+                        current_perception.radius,
+                        obstacle,
+                        action[i]
+                    )[-1]
+                    max_inverse_exp_time = max(max_inverse_exp_time, inverse_exp_time)
+                elif self.obs_mode == "lidar":
+                    inverse_exp_time = self.get_vo_representation_lidar(
+                        current_perception.state,
+                        current_perception.velocity,
+                        current_perception.radius,
+                        obstacle,
+                        action[i]
+                    )[-1]
+                    max_inverse_exp_time = max(max_inverse_exp_time, inverse_exp_time)
+                else:
+                    raise ValueError("Invalid obs_mode")
             
             min_collision_time = 1/max_inverse_exp_time - 0.2 if max_inverse_exp_time > 0 else inf
             
@@ -62,57 +72,75 @@ class VOController:
             reward_list.append(reward)
         return reward_list
 
-
     def get_observations(self, previous_perceptions: List[PerceptionInfo], current_perceptions: List[PerceptionInfo]):
-        observation_list = []
-        for i in range(self.robot_num):
-            current_perception = current_perceptions[i]
-            pro_obs = np.array([current_perception.velocity[0], current_perception.velocity[1],
-                                current_perception.desired_velocity[0], current_perception.desired_velocity[1],
-                                current_perception.state[2],
-                                current_perception.radius])
-            
-            ext_obs_list = []
-            for obstacle in current_perception.obstacle_list:
-                if self.obs_mode == "ground_truth":
-                    ext_obs = self.get_vo_info_ground_truth(
-                        current_perception.state,
-                        current_perception.velocity,
-                        current_perception.radius,
-                        obstacle
-                        )
-                elif self.obs_mode == "lidar":
-                    raise NotImplementedError
-                else:
-                    raise ValueError("Invalid obs_mode")
-                ext_obs_list.append(ext_obs)
-            
-
-            ext_obs_list.sort(key=lambda x: (-x[-1], x[-2]), reverse=True)           
-
-            # filter by neighbor_num
-            if len(ext_obs_list) > self.neighbor_num:
-                ext_obs_list = ext_obs_list[-self.neighbor_num:]
-
-            if len(ext_obs_list) == 0:
-                exter_obs = np.zeros((8,))
-            else:
-                exter_obs = np.concatenate(ext_obs_list)
-            
-            observation = np.round(np.concatenate((pro_obs, exter_obs)), 2)
-            observation_list.append(observation)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            # Map preserves the order of the input arguments
+            observation_list = list(executor.map(
+                lambda args: self.get_robot_observation(*args),
+                zip(previous_perceptions, current_perceptions)
+            ))
         return observation_list
-            
+    
+    def get_robot_observation(self, prev_perception, current_perception):
+        pro_obs = np.array([current_perception.velocity[0], current_perception.velocity[1],
+                            current_perception.desired_velocity[0], current_perception.desired_velocity[1],
+                            current_perception.state[2],
+                            current_perception.radius])
+        
+        ext_obs_list = []
+
+        if self.obs_mode == "ground_truth":
+            for obstacle in current_perception.obstacle_list:
+                ext_obs = self.get_vo_representation_ground_truth(
+                    current_perception.state,
+                    current_perception.velocity,
+                    current_perception.radius,
+                    obstacle
+                    )
+                ext_obs_list.append(ext_obs)
+        elif self.obs_mode == "lidar":
+            if prev_perception is None:
+                obstacle_list = current_perception.obstacle_list
+            else:
+                # create mapping between current and previous perceptions
+                prev_to_current_mapping = self.create_prev_to_current_mapping(current_perception, prev_perception)
+                # set velocity for each cluster
+                self.estimate_and_set_cluster_velocity(prev_to_current_mapping)
+
+                obstacle_list = list(prev_to_current_mapping.values())
+
+            for obstacle in obstacle_list:
+                ext_obs = self.get_vo_representation_lidar(
+                    current_perception.state,
+                    current_perception.velocity,
+                    current_perception.radius,
+                    obstacle
+                )
+                ext_obs_list.append(ext_obs)
+
+        ext_obs_list.sort(key=lambda x: (-x[-1], x[-2]), reverse=True)           
+
+        # filter by neighbor_num
+        if len(ext_obs_list) > self.neighbor_num:
+            ext_obs_list = ext_obs_list[-self.neighbor_num:]
+
+        if len(ext_obs_list) == 0:
+            exter_obs = np.zeros((8,))
+        else:
+            exter_obs = np.concatenate(ext_obs_list)
+        
+        observation = np.round(np.concatenate((pro_obs, exter_obs)), 2)
+        return observation
             
     
-    def get_vo_info_ground_truth(self, 
+    def get_vo_representation_ground_truth(self, 
                                 robot_state: Tuple,
                                 robot_velocity: Tuple,
                                 robot_radius: float,
                                 obstacle: CircularObstacle,
                                 action: Optional[Tuple] = None,
                                 mode: str="rvo"
-        ) -> Dict:
+        ) -> np.ndarray:
         result_dict = {
             "vo_representation": None,
             "minimum_collision_time": None
@@ -129,9 +157,6 @@ class VOController:
 
         if mvx == 0 and mvy == 0:
             mode = "vo"
-        
-        vo_flag = False
-        collision_flag = False
 
         rel_x = x - mx
         rel_y = y - my
@@ -140,10 +165,6 @@ class VOController:
         angle_mr = atan2(my - y, mx - x)
 
         real_dis_mr = np.sqrt(rel_y**2 + rel_x**2)
-
-        if dis_mr <= r + mr:
-            dis_mr = r + mr
-            collision_flag = True
         
         ratio = (r + mr) / dis_mr
         half_angle = asin(ratio)
@@ -161,14 +182,9 @@ class VOController:
         
         exp_time = inf
 
-        if self.vo_out_jud_vector(action[0], action[1], vo):
-            vo_flag = False
-            exp_time = inf
-        else:
-            vo_flag = True
+        if not self.vo_out_jud_vector(action[0], action[1], vo):
             exp_time = self.cal_exp_time(rel_x, rel_y, rel_vx, rel_vy, r + mr)
             if exp_time >= self.ctime_threshold:
-                vo_flag = False
                 exp_time = inf
         
         inverse_exp_time = 1 / (exp_time + 0.2)
@@ -178,6 +194,115 @@ class VOController:
             
         return vo_representation
     
+    def create_prev_to_current_mapping(self, 
+                        current_perception: PerceptionInfo, 
+                        prev_perceptions: PerceptionInfo
+                    ) -> Dict[LidarCluster, LidarCluster]:
+        current_clusters = current_perception.obstacle_list
+        prev_clusters = prev_perceptions.obstacle_list
+
+        prev_to_current_mapping = {}
+        current_to_prev_mapping = {}
+        current_to_prev_distances = {}
+
+        for current_cluster in current_clusters:
+            # find the closest cluster in the previous perception
+            closest_distance = inf
+            closest_prev_cluster = None
+            for prev_cluster in prev_clusters:
+                distance = sqrt(
+                    (current_cluster.centroid[0] - prev_cluster.centroid[0])**2 +
+                    (current_cluster.centroid[1] - prev_cluster.centroid[1])**2
+                )
+                if distance < closest_distance:
+                    closest_distance = distance
+                    closest_prev_cluster = prev_cluster
+
+            if closest_prev_cluster is not None:
+                current_to_prev_mapping[current_cluster] = closest_prev_cluster
+                current_to_prev_distances[current_cluster] = closest_distance
+
+        # Reverse mapping: find the best current cluster for each previous cluster
+        for current_cluster, prev_cluster in current_to_prev_mapping.items():
+            if prev_cluster not in prev_to_current_mapping or current_to_prev_distances[current_cluster] < current_to_prev_distances[prev_to_current_mapping[prev_cluster]]:
+                prev_to_current_mapping[prev_cluster] = current_cluster
+
+        return prev_to_current_mapping
+
+    def estimate_and_set_cluster_velocity(self, prev_to_current_mapping: Dict[LidarCluster, LidarCluster]):
+        for prev_cluster, current_cluster in prev_to_current_mapping.items():
+            current_cluster.set_velocity((current_cluster.centroid[0] - prev_cluster.centroid[0], current_cluster.centroid[1] - prev_cluster.centroid[1]))
+    
+    def get_vo_representation_lidar(self, 
+                                robot_state: Tuple,
+                                robot_velocity: Tuple,
+                                robot_radius: float,
+                                obstacle: LidarCluster,
+                                action: Optional[Tuple] = None,
+                                mode: str="rvo",
+        ) -> np.ndarray:
+        if action is None:
+            action = robot_velocity
+        
+        assert obstacle.velocity is not None, "Cluster velocity is not set"
+        x, y, _ = robot_state
+
+        vx, vy = robot_velocity
+        r = robot_radius + self.safety_distance
+        mvx, mvy = obstacle.velocity
+
+        left_point = obstacle.points[0]
+        right_point = obstacle.points[-1]
+
+        left_dis = sqrt((left_point[0] - x)**2 + (left_point[1] - y)**2)
+        right_dis = sqrt((right_point[0] - x)**2 + (right_point[1] - y)**2)
+
+        left_half_angle = asin(r / left_dis) if r<left_dis else pi/2
+        right_half_angle = asin(r / right_dis) if r<right_dis else pi/2
+
+        left_angle = atan2(left_point[1] - y, left_point[0] - x)
+        right_angle = atan2(right_point[1] - y, right_point[0] - x)
+
+        line_left_ori = self.wraptopi(left_angle + left_half_angle)
+        line_right_ori = self.wraptopi(right_angle - right_half_angle)
+
+        if mvx == 0 and mvy == 0:
+            mode = "vo"
+        
+        if mode == "vo":
+            vo = [mvx, mvy, line_left_ori, line_right_ori]
+            rel_vx = action[0] - mvx
+            rel_vy = action[1] - mvy
+        elif mode == "rvo":
+            vo = [(vx + mvx) / 2, (vy + mvy) / 2, line_left_ori, line_right_ori]
+            rel_vx = 2 * action[0] - mvx - vx
+            rel_vy = 2 * action[1] - mvy - vy
+        
+        exp_time = inf
+        if not self.vo_out_jud_vector(action[0], action[1], vo):
+            exp_time = self.cal_exp_time_to_lidar_cluster(x, y, obstacle, rel_vx, rel_vy, r)
+            if exp_time >= self.ctime_threshold:
+                exp_time = inf
+
+        inverse_exp_time = 1 / (exp_time + 0.2)
+        min_dis = obstacle.min_dist
+
+        vo_representation = [vo[0], vo[1], cos(vo[2]), sin(vo[2]), cos(vo[3]), sin(vo[3]), min_dis, inverse_exp_time]
+    
+        return vo_representation
+
+    def cal_exp_time_to_lidar_cluster(self, x, y, cluster: LidarCluster, rel_vx, rel_vy, combined_r):
+        points = cluster.points
+        exp_time = inf
+        for i in range(points.shape[0]):
+            px = points[i, 0]
+            py = points[i, 1]
+            rel_x = x - px
+            rel_y = y - py
+            t = self.cal_exp_time(rel_x, rel_y, rel_vx, rel_vy, combined_r + self.safety_distance)
+            exp_time = min(exp_time, t)
+        return exp_time
+
 
     @staticmethod
     def cal_exp_time(rel_x, rel_y, rel_vx, rel_vy, combined_r):

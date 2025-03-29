@@ -17,8 +17,8 @@ class post_train:
         self.reset_mode = reset_mode
         self.render=render
         self.save=save
-        self.robot_number = self.env.ir_gym.robot_number
-        self.step_time = self.env.ir_gym.step_time
+        self.robot_number = self.env.robot_number
+        self.step_time = self.env.step_time
 
         self.inf_print = kwargs.get('inf_print', True)
         self.std_factor = kwargs.get('std_factor', 0.001)
@@ -38,7 +38,7 @@ class post_train:
         if policy_type == 'drl':
             model_action = self.load_policy(policy_path, self.std_factor, policy_dict=policy_dict)
 
-        o, r, d, ep_ret, ep_len, n = self.env.reset(mode=self.reset_mode), 0, False, 0, 0, 0
+        o, r, d, ep_ret, ep_len, n = self.env.reset(random_ori=True), 0, False, 0, 0, 0
         ep_ret_list, speed_list, mean_speed_list, ep_len_list, sn = [], [], [], [], 0
 
         print('Policy Test Start !')
@@ -52,7 +52,7 @@ class post_train:
             action_time_list = []
 
             if self.render or self.save:
-                self.env.render(save=self.save, path=figure_save_path, i = figure_id, show_traj=self.show_traj, traj_type=self.traj_type)
+                self.env.render()
             
             if policy_type == 'drl': 
                 abs_action_list =[]
@@ -65,13 +65,13 @@ class post_train:
                     temp = end_time - start_time
                     action_time_list.append(temp)
 
-                    cur_vel = self.env.ir_gym.robot_list[i].vel_omni
-                    abs_action = self.acceler_vel * a_inc + np.squeeze(cur_vel)
+                    cur_vel = self.env.robot_list[i].velocity_xy
+                    abs_action = a_inc + np.squeeze(cur_vel)
                     abs_action_list.append(abs_action)
 
-            o, r, d, info = self.env.step_(abs_action_list)
+            o, r, d, info = self.env.step(abs_action_list)
 
-            robot_speed_list = [np.linalg.norm(robot.vel_omni) for robot in self.env.ir_gym.robot_list]
+            robot_speed_list = [np.linalg.norm(robot.velocity_xy) for robot in self.env.robot_list]
             avg_speed = np.average(robot_speed_list)
             speed_list.append(avg_speed)
 
@@ -92,7 +92,7 @@ class post_train:
                 mean_speed_list.append(speed)
                 speed_list = []
 
-                o, r, d, ep_ret, ep_len = self.env.reset(), 0, False, 0, 0
+                o, r, d, ep_ret, ep_len = self.env.reset(random_ori=True), 0, False, 0, 0
 
                 n += 1
 

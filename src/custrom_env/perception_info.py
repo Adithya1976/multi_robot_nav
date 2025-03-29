@@ -9,10 +9,11 @@ class CircularObstacle:
         self.radius = radius
 
 class LidarCluster:
-    def __init__(self, points: np.ndarray):
-        super(LidarCluster, self).__init__(type="lidar")
+    def __init__(self, points: np.ndarray, centroid: np.ndarray = None, min_dist: float = None):
         self.points = points
-        self.velocity = None
+        self.centroid = centroid
+        self.min_dist = min_dist
+        self.velocity = (0, 0)
     
     def set_velocity(self, velocity: Tuple):
         self.velocity = velocity

@@ -1,7 +1,7 @@
 import copy
 from math import atan2, cos, pi
 import math
-from typing import List
+from typing import Dict, List
 from gym import spaces
 import numpy as np
 
@@ -11,6 +11,7 @@ from custrom_env.rvo_controller import VOController
 from custrom_env.vo_robot import VORobot
 from irsim.env import EnvBase
 from irsim.world.robots.robot_diff import RobotDiff
+import concurrent.futures
 
 
 class VOEnv(EnvBase):
@@ -25,7 +26,13 @@ class VOEnv(EnvBase):
         neighbor_num=5,
         collision_time_threshold=5,
         safety_distance=0.2,
-        lidar_resolution=0.2,
+        lidar_config_dict = {
+            "range_limit": 8,
+            "jump_threshold": 0.15,
+            "number": 1800,
+            "angle_min": 0,
+            "angle_max": 2*pi,
+        },
         **kwargs
     ):
         super(VOEnv, self).__init__(world_name, **kwargs)
@@ -35,10 +42,8 @@ class VOEnv(EnvBase):
         self.neighbor_num = neighbor_num
         self.collision_time_threshold = collision_time_threshold
 
-        self.lidar_resolution = lidar_resolution
-
         # initialise VO robots
-        self.vo_robots = self.init_vo_robots()
+        self.vo_robots = self.init_vo_robots(lidar_config_dict)
         # initialise RVO Controller
         self.rvo_controller = VOController(
             obs_mode=obs_mode,
@@ -49,20 +54,30 @@ class VOEnv(EnvBase):
             collision_time_threshold=collision_time_threshold,
             safety_distance=safety_distance,
         )
-        # initialise perception info
-        self.prev_perceptions: List[PerceptionInfo] = [None for _ in range(self.robot_number)]
-        self.current_perceptions: List[PerceptionInfo] = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
+
+        # initialise perceptions
+        self.init_perceptions()
     
         self.recieved_goal_rewards = [False for _ in range(self.robot_number)]
+    
+    def init_perceptions(self):
+        self.prev_perceptions = [None for _ in range(self.robot_number)]
+        self.current_perceptions = [vo_robot.get_perception_info(init_vel = True) for vo_robot in self.vo_robots]
 
-    def init_vo_robots(self) -> List[VORobot]:
+    def init_vo_robots(self, lidar_config_dict: Dict) -> List[VORobot]:
         vo_robots = []
         for i in range(self.robot_number):
             robot = self.robot_list[i]
             external_objects = self.objects[:i] + self.objects[i+1:]
-            vo_robot = VORobot(robot, external_objects, self.neighbor_region, self.obs_mode, self.lidar_resolution)
+            vo_robot = VORobot(robot, external_objects, self.neighbor_region, self.obs_mode, lidar_config_dict)
             vo_robots.append(vo_robot)
         return vo_robots
+    
+    def get_vo_robot_perceptions(self):
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            perceptions = list(executor.map(lambda robot: robot.get_perception_info(), self.vo_robots))
+        
+        return perceptions
     
     def step(self, action_list):
 
@@ -89,11 +104,13 @@ class VOEnv(EnvBase):
             recieved_goal_rewards=self.recieved_goal_rewards,
             action=action_list
             )
-        observation_list = self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
+        
         
         # get collision and arrive flags
         collision_list_flag = [vo_robot.collision for vo_robot in self.vo_robots]
         arrive_list_flag = [vo_robot.arrive for vo_robot in self.vo_robots]
+
+        observation_list = self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
 
         return observation_list, reward_list, collision_list_flag, arrive_list_flag
 
@@ -172,7 +189,7 @@ class VOEnv(EnvBase):
             
             return None
         
-        self.current_perceptions = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
+        self.current_perceptions = [vo_robot.get_perception_info(init_vel=True) for vo_robot in self.vo_robots]
         return self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
 
     # use this function only when absolutely necessary as it is expensive to call

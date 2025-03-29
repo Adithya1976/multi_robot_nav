@@ -9,14 +9,12 @@ from irsim.world.object_base import ObjectBase
 
 class SimulatedLidar2D:
     def __init__(self,
-        range_min=0,
         range_max=8,
         angle_range=2*math.pi,
         number=1800,
         external_objects = [],
         **kwargs
     ):
-        self.range_min = range_min
         self.range_max = range_max
         self.angle_range = angle_range
         self.number = number
@@ -27,17 +25,18 @@ class SimulatedLidar2D:
         self.angle_inc = angle_range / number
         self.angle_list = np.linspace(self.angle_min, self.angle_max, self.number)
 
-        self.range_data = range_max * np.ones(self.number)
-
     def get_scan(self, state: np.ndarray):
+        self.range_data = self.range_max * np.ones(self.number)
 
         # filter objects that are not in the range
         filtered_objects = [
-            obj for obj in self.external_objects if self.is_in_range(obj)
+            obj for obj in self.external_objects if self.is_in_range(state, obj)
         ]
 
         for obj in filtered_objects:
             self.update_range_data(state, obj)
+        
+        return self.range_data
 
     def update_range_data(self, state, obj):
         if obj.shape == "circle":

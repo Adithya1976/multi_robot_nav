@@ -80,13 +80,13 @@ par_train.add_argument('--figure_save_path', default='figure')
 par_train.add_argument('--save_path', default=str(cur_path / 'model_save') + '/')
 par_train.add_argument('--save_name', default= 'r')
 par_train.add_argument('--load_path', default=str(cur_path / 'model_save')+ '/')
-par_train.add_argument('--load_name', default='r4_0/r4_0_check_point_250.pt') # '/r4_0/r4_0_check_point_250.pt' 
+par_train.add_argument('--load_name', default='r4_63/r4_63_check_point_250.pt') # '/r4_0/r4_0_check_point_250.pt' 
 par_train.add_argument('--save_result', type=bool, default=True)
 par_train.add_argument('--lr_decay_epoch', type=int, default=1000)
 par_train.add_argument('--max_update_num', type=int, default=10)
 
 args = parser.parse_args(['--train_epoch', '250'])
-
+args.con_train = True
 # decide the model path and model name 
 model_path_check = args.save_path + args.save_name + str(args.robot_number) + '_{}'
 model_name_check = args.save_name + str(args.robot_number) +  '_{}'

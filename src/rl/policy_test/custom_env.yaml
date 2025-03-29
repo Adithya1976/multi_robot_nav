@@ -6,7 +6,7 @@ world:
   show_sensor: false
 
 robot:
-  - number: 4
+  - number: 5
     distribution: {name: 'circle', radius: 5, center: [5, 5]}  
     kinematics: {name: 'diff'}
     shape: 
