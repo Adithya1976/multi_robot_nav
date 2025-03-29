@@ -6,6 +6,7 @@ import scipy
 import scipy.signal
 import time
 import os
+from custrom_env.vo_env import VOEnv
 from gym_env.envs import ir_gym
 from rl.policy.actor_critic import ActorCritic
 from rl.policy_test.post_train import post_train
@@ -109,10 +110,10 @@ class multi_ppo:
         elif device == 'cuda':
             torch.cuda.synchronize()
 
-        self.env : ir_gym = env
+        self.env : VOEnv = env
         self.ac = ac_policy
         self.con_train=con_train
-        self.robot_num = env.ir_gym.robot_number
+        self.robot_num = env.robot_number
         self.reset_mode = reset_mode
 
         self.obs_dim = env.observation_space.shape
@@ -158,7 +159,7 @@ class multi_ppo:
 
     def training_loop(self):
 
-        obs_list, ep_ret_list, ep_len_list = self.env.reset(mode=self.reset_mode), [0] * self.robot_num, [0] * self.robot_num
+        obs_list, ep_ret_list, ep_len_list = self.env.reset(random_ori=True), [0] * self.robot_num, [0] * self.robot_num
         ep_ret_list_mean = [[] for i in range(self.robot_num)]
 
         for epoch in tqdm(range(self.epoch + 1), desc='epoch'):
@@ -184,13 +185,13 @@ class multi_ppo:
                     v_list.append(v)
                     logp_list.append(logp)
 
-                    cur_vel = np.squeeze(self.env.ir_gym.robot_list[i].vel_omni)
-                    abs_action = self.env.ir_gym.acceler * np.round(a_inc, 2)  + cur_vel
+                    cur_vel = np.squeeze(self.env.robot_list[i].velocity_xy)
+                    abs_action = np.round(a_inc, 2)  + cur_vel
                     # abs_action = 1.5*a_inc
                     abs_action = np.round(abs_action, 2)
                     abs_action_list.append(abs_action)
 
-                next_obs_list, reward_list, done_list, info_list = self.env.step_ir(abs_action_list, vel_type = 'omni')
+                next_obs_list, reward_list, done_list, info_list = self.env.step(abs_action_list)
 
                 # save to buffer
                 for i in range(self.robot_num):
@@ -208,10 +209,7 @@ class multi_ppo:
 
                 if epoch_ended or arrive_all:
 
-                    if epoch + 1 % 300 == 0:
-                        obs_list = self.env.reset(mode=self.reset_mode)
-                    else:
-                        obs_list = self.env.reset(mode=0)
+                    obs_list = self.env.reset(random_ori=True)
                     
                     for i in range(self.robot_num):
                         
@@ -228,14 +226,14 @@ class multi_ppo:
                     for i in range(self.robot_num):
                         if done_list[i] or ep_len_list[i] > self.max_ep_len:
                         
-                            self.env.reset_one(i)
+                            self.env.reset(id=i, random_ori=True)
                             ep_ret_list_mean[i].append(ep_ret_list[i])
                             ep_ret_list[i] = 0
                             ep_len_list[i] = 0
 
                         self.buf_list[i].finish_path(0)
                     
-                    obs_list = self.env.ir_gym.env_observation()
+                    obs_list = self.env.get_observation()
 
             if (epoch % self.save_freq == 0) or (epoch == self.epoch) and epoch != 0:
                 self.save_model(epoch) 

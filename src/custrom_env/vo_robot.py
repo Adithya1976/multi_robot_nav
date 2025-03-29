@@ -7,19 +7,19 @@ from irsim.world.robots.robot_diff import RobotDiff
 
 
 class VORobot:
-    def __init__(self, robot: RobotDiff, external_objects: List[ObjectBase], neighbor_region: int, mode: str):
+    def __init__(self, robot: RobotDiff, external_objects: List[ObjectBase], neighbor_region: int, mode: str, lidar_resolution: float):
         self.robot = robot
         self.external_objects = external_objects
         self.mode = mode
         self.neighbor_region = neighbor_region
-    
-    def get_perception_info(self) -> PerceptionInfo:
-        if self.mode == "ground_truth":
-            state = self.robot.state[0, 0], self.robot.state[1, 0], self.robot.state[2, 0]
-            velocity = self.robot.velocity_xy[0, 0], self.robot.velocity_xy[1, 0]
-            radius = self.robot.radius
-            desired_velocity = self.calculate_desired_velocity()
+        self.lidar_resolution = lidar_resolution
 
+    def get_perception_info(self) -> PerceptionInfo:
+        state = self.robot.state[0, 0], self.robot.state[1, 0], self.robot.state[2, 0]
+        velocity = self.robot.velocity_xy[0, 0], self.robot.velocity_xy[1, 0]
+        radius = self.robot.radius
+        desired_velocity = self.calculate_desired_velocity()
+        if self.mode == "ground_truth":
             obstacle_list = [
                 CircularObstacle(
                     position = (obj.state[0, 0], obj.state[1, 0]),
@@ -42,6 +42,17 @@ class VORobot:
                 collision=self.collision,
                 obstacle_list=obstacle_list 
             )
+        elif self.mode == "lidar":
+            # get lidar scan
+            ranges = self.get_lidar_scan()
+
+            # generate clusters
+            return PerceptionInfo(
+                type="lidar",
+                ranges=ranges
+            )
+        else:
+            raise ValueError("Invalid mode")
     
     def calculate_desired_velocity(self) -> Tuple:
         if self.arrive:

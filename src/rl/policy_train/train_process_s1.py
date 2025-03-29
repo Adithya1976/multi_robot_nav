@@ -3,6 +3,7 @@ import sys
 import gym
 import pickle
 import shutil
+from custrom_env.vo_env import VOEnv
 import gym_env
 import argparse
 from torch import nn
@@ -99,9 +100,7 @@ model_name = model_name_check.format(counter)
 
 load_fname = args.load_path + args.load_name
 
-env = gym.make(args.env_name, world_name=args.world_path, robot_number=args.robot_number, neighbors_region=args.neighbors_region, neighbors_num=args.neighbors_num, robot_init_mode=args.init_mode, env_train=args.env_train, random_bear=args.random_bear, random_radius=args.random_radius, reward_parameter=args.reward_parameter, full=args.full)
-
-test_env = gym.make(args.env_name, world_name=args.world_path, robot_number=args.robot_number, neighbors_region=args.neighbors_region, neighbors_num=args.neighbors_num, robot_init_mode=args.init_mode, env_train=False, random_bear=args.random_bear, random_radius=args.random_radius, reward_parameter=args.reward_parameter, plot=False, full=args.full)
+env = VOEnv('custom_env.yaml', obs_mode='ground_truth')
 
 policy = ActorCritic(env.observation_space, env.action_space, args.state_dim, args.dilnet_input_dim, args.dilnet_hidden_dim, 
                     args.hidden_sizes_ac, args.hidden_sizes_v, args.activation, args.output_activation, 

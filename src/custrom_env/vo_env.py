@@ -25,6 +25,7 @@ class VOEnv(EnvBase):
         neighbor_num=5,
         collision_time_threshold=5,
         safety_distance=0.2,
+        lidar_resolution=0.2,
         **kwargs
     ):
         super(VOEnv, self).__init__(world_name, **kwargs)
@@ -33,6 +34,8 @@ class VOEnv(EnvBase):
         self.neighbor_region = neighbor_region
         self.neighbor_num = neighbor_num
         self.collision_time_threshold = collision_time_threshold
+
+        self.lidar_resolution = lidar_resolution
 
         # initialise VO robots
         self.vo_robots = self.init_vo_robots()
@@ -44,10 +47,10 @@ class VOEnv(EnvBase):
             neighbor_region=neighbor_region,
             neighbor_num=neighbor_num,
             collision_time_threshold=collision_time_threshold,
-            safety_distance=safety_distance
+            safety_distance=safety_distance,
         )
         # initialise perception info
-        self.prev_perceptions: List[PerceptionInfo] = None
+        self.prev_perceptions: List[PerceptionInfo] = [None for _ in range(self.robot_number)]
         self.current_perceptions: List[PerceptionInfo] = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
     
         self.recieved_goal_rewards = [False for _ in range(self.robot_number)]
@@ -57,7 +60,7 @@ class VOEnv(EnvBase):
         for i in range(self.robot_number):
             robot = self.robot_list[i]
             external_objects = self.objects[:i] + self.objects[i+1:]
-            vo_robot = VORobot(robot, external_objects, self.neighbor_region, self.obs_mode)
+            vo_robot = VORobot(robot, external_objects, self.neighbor_region, self.obs_mode, self.lidar_resolution)
             vo_robots.append(vo_robot)
         return vo_robots
     
@@ -68,7 +71,7 @@ class VOEnv(EnvBase):
         for i, action in enumerate(action_list):
             vo_robot = self.vo_robots[i]
             if vo_robot.arrive or vo_robot.collision:
-                diff_action = np.zeroes(2, 1)
+                diff_action = np.zeros((2, 1))
             else:
                 diff_action = self.omni2diff(vo_robot.state, action, vo_robot.robot.vel_max[0,0], vo_robot.robot.vel_max[1, 0])
             diff_action_list.append(diff_action)
@@ -151,6 +154,7 @@ class VOEnv(EnvBase):
                     theta = np.random.uniform(-pi, pi)
                     new_state = [robot.state[0, 0], robot.state[1, 0], theta]
                     robot.set_state(new_state)
+            self.prev_perceptions = [None for _ in range(self.robot_number)]
         else:
             # reset a single bot
             self.robot_list[id].reset()
@@ -163,9 +167,14 @@ class VOEnv(EnvBase):
                 theta = np.random.uniform(-pi, pi)
                 new_state = [robot.state[0, 0], robot.state[1, 0], theta]
                 robot.set_state(new_state)
+
+            self.prev_perceptions[id] = None
             
             return None
         
-        self.prev_perceptions = None
         self.current_perceptions = [vo_robot.get_perception_info() for vo_robot in self.vo_robots]
+        return self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
+
+    # use this function only when absolutely necessary as it is expensive to call
+    def get_observation(self):
         return self.rvo_controller.get_observations(self.prev_perceptions, self.current_perceptions)
