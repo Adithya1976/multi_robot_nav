@@ -21,7 +21,7 @@ class VOEnv(EnvBase):
         self, 
         world_name, 
         obs_mode, 
-        reward_parameters=(0.3, 1.0, 0.3, 1.2, 0.2, 3.6, 0, 0), 
+        reward_parameters=(0.3, 1.0, 0.3, 1.2, 0.2, 4.5, 0, 0), 
         neighbor_region=4, 
         neighbor_num=5,
         collision_time_threshold=5,

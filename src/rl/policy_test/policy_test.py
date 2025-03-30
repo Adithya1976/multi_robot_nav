@@ -8,6 +8,8 @@ from rl.policy_test.post_train import post_train
 import argparse
 import os
 from os.path import dirname, abspath
+import matplotlib
+matplotlib.use('MacOSX')
 
 os.environ["KMP_DUPLICATE_LIB_OK"]  =  "TRUE"
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
@@ -15,9 +17,9 @@ os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
 parser = argparse.ArgumentParser(description='policy test')
 parser.add_argument('--policy_type', default='drl')
 parser.add_argument('--model_path', default='policy_train/model_save')
-parser.add_argument('--model_name', default='r4_63/r4_63_150.pt')  #   policy_dict=False    
+parser.add_argument('--model_name', default='r5_12/r5_12_50.pt')  #   policy_dict=False    
 # parser.add_argument('--model_name', default='r4_0/r4_0_check_point_250.pt')  with check point --> policy_dict=True
-parser.add_argument('--arg_name', default='r4_0/r4_0')
+parser.add_argument('--arg_name', default='r5_12/r5_12')
 parser.add_argument('--world_name', default='policy_test_world.yaml')  # policy_test_world_lines.yaml
 parser.add_argument('--render', action='store_true')
 parser.add_argument('--robot_number', type=int, default='5')
@@ -45,7 +47,7 @@ if policy_args.policy_type == 'drl':
     fname_model = model_base_path + '/' + policy_args.model_name 
     policy_name = 'drl_rvo'
     
-env = VOEnv('custom_env.yaml', 'ground_truth')
+env = VOEnv('custom_env.yaml', 'lidar')
 
 policy_name = policy_name + '_' + str(policy_args.robot_number) + '_dis' + str(policy_args.dis_mode)
 

@@ -124,6 +124,7 @@ class multi_ppo:
         self.vf_optimizer = Adam(self.ac.v.parameters(), lr=vf_lr)
 
         if con_train:
+            print("Continuing Training")
             check_point = torch.load(load_fname)
             self.ac.load_state_dict(check_point['model_state'], strict=True)
             self.ac.train()

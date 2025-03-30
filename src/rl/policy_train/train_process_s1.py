@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='drl rvo parameters')
 par_env = parser.add_argument_group('par env', 'environment parameters') 
 par_env.add_argument('--env_name', default='mrnav-v1')
 par_env.add_argument('--world_path', default='train_world.yaml') # dynamic_obs_test.yaml; train_world.yaml
-par_env.add_argument('--robot_number', type=int, default=4)
+par_env.add_argument('--robot_number', type=int, default=5)
 par_env.add_argument('--init_mode', default=3)
 par_env.add_argument('--reset_mode', default=3)
 par_env.add_argument('--mpi', default=False)
@@ -80,19 +80,19 @@ par_train.add_argument('--figure_save_path', default='figure')
 par_train.add_argument('--save_path', default=str(cur_path / 'model_save') + '/')
 par_train.add_argument('--save_name', default= 'r')
 par_train.add_argument('--load_path', default=str(cur_path / 'model_save')+ '/')
-par_train.add_argument('--load_name', default='r4_63/r4_63_check_point_250.pt') # '/r4_0/r4_0_check_point_250.pt' 
+par_train.add_argument('--load_name', default='r5_9/r5_9_check_point_250.pt') # '/r4_0/r4_0_check_point_250.pt' 
 par_train.add_argument('--save_result', type=bool, default=True)
 par_train.add_argument('--lr_decay_epoch', type=int, default=1000)
 par_train.add_argument('--max_update_num', type=int, default=10)
 
-args = parser.parse_args(['--train_epoch', '250'])
-args.con_train = True
+args = parser.parse_args(['--train_epoch', '1500'])
 # decide the model path and model name 
 model_path_check = args.save_path + args.save_name + str(args.robot_number) + '_{}'
 model_name_check = args.save_name + str(args.robot_number) +  '_{}'
 while os.path.isdir(model_path_check.format(counter)):
     counter+=1
 
+args.con_train = True
 device = args.device
 
 model_abs_path = model_path_check.format(counter) + '/'
@@ -100,7 +100,7 @@ model_name = model_name_check.format(counter)
 
 load_fname = args.load_path + args.load_name
 
-env = VOEnv('custom_env.yaml', obs_mode='ground_truth')
+env = VOEnv('custom_env.yaml', obs_mode='lidar')
 
 policy = ActorCritic(env.observation_space, env.action_space, args.state_dim, args.dilnet_input_dim, args.dilnet_hidden_dim, 
                     args.hidden_sizes_ac, args.hidden_sizes_v, args.activation, args.output_activation, 

@@ -7,7 +7,7 @@ world:
 
 robot:
   - number: 5
-    distribution: {name: 'circle', radius: 5, center: [5, 5]}  
+    distribution: {name: 'circle', radius: 4, center: [5, 5]}  
     kinematics: {name: 'diff'}
     shape: 
       - {name: 'circle', radius: 0.2} 

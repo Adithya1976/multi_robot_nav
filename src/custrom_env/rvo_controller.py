@@ -64,7 +64,7 @@ class VOController:
             elif not current_perception.arrive:
                 if min_collision_time > self.ctime_threshold:
                     rvo_reward = p1 - p2 * dis_des
-                elif min_collision_time > 0.1:
+                elif min_collision_time > 0.2:
                     rvo_reward = p3 - p4 * (1/(min_collision_time + p5))
                 else:
                     rvo_reward = -p6*(1/(min_collision_time + p5))
