@@ -3,3 +3,12 @@
 __pycache__/
 
 model_save/
+
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+
+dataset/
+
+world_dataset/

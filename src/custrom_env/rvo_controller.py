@@ -141,7 +141,7 @@ class VOController:
                                 robot_radius: float,
                                 obstacle: CircularObstacle,
                                 action: Optional[Tuple] = None,
-                                mode: str="rvo"
+                                mode: str="vo"
         ) -> np.ndarray:
         if action is None:
             action = robot_velocity
@@ -153,7 +153,7 @@ class VOController:
         mvx, mvy = obstacle.velocity
         mr = obstacle.radius + self.safety_distance
 
-        if mvx == 0 and mvy == 0:
+        if mvx < 0.05 and mvy < 0.05:
             mode = "vo"
 
         rel_x = x - mx
@@ -240,7 +240,7 @@ class VOController:
                                 robot_radius: float,
                                 obstacle: LidarCluster,
                                 action: Optional[Tuple] = None,
-                                mode: str="rvo",
+                                mode: str="vo",
         ) -> np.ndarray:
         if action is None:
             action = robot_velocity
@@ -272,7 +272,7 @@ class VOController:
         line_left_ori = self.wraptopi(left_angle + left_half_angle)
         line_right_ori = self.wraptopi(right_angle - right_half_angle)
 
-        if mvx == 0 and mvy == 0:
+        if mvx < 0.05 and mvy < 0.05:
             mode = "vo"
         
         if mode == "vo":
