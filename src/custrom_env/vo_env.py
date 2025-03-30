@@ -6,7 +6,7 @@ from gym import spaces
 import numpy as np
 
 from custrom_env import vo_robot
-from custrom_env.perception_info import PerceptionInfo
+from custrom_env.perception_info import LidarCluster, PerceptionInfo
 from custrom_env.rvo_controller import VOController
 from custrom_env.vo_robot import VORobot
 from irsim.env import EnvBase
@@ -28,7 +28,7 @@ class VOEnv(EnvBase):
         safety_distance=0.2,
         lidar_config_dict = {
             "range_limit": 8,
-            "jump_threshold": 0.15,
+            "jump_threshold": 0.08,
             "number": 1800,
             "angle_min": 0,
             "angle_max": 2*pi,
@@ -78,6 +78,17 @@ class VOEnv(EnvBase):
             perceptions = list(executor.map(lambda robot: robot.get_perception_info(), self.vo_robots))
         
         return perceptions
+    
+    def plot_perception(self, robot_id):
+        perception = self.current_perceptions[robot_id]
+        if perception.type == "lidar":
+            for i, obstacle in enumerate(perception.obstacle_list):
+                obstacle: LidarCluster
+                # random colour
+                c_list = ['r', 'g', 'b', 'pink', 'orange', 'yellow', 'purple', 'cyan']
+                c = c_list[i] if i < len(c_list) else 'k'
+
+                self._env_plot.draw_points(obstacle.points.transpose(), s=20, c=c)
     
     def step(self, action_list):
 

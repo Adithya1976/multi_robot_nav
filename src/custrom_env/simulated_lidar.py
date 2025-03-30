@@ -115,42 +115,50 @@ class SimulatedLidar2D:
     def update_range_linestring(self, state, obj):
         # find min and max angles w.r.t state
         geometry = obj.geometry
-        angle1 = math.atan2(geometry.coords[0][1] - state[1, 0], geometry.coords[0][0] - state[0, 0]) - state[2, 0]
-        angle2 = math.atan2(geometry.coords[1][1] - state[1, 0], geometry.coords[1][0] - state[0, 0]) - state[2, 0]
 
-        angle_min = min(angle1, angle2)
-        angle_max = max(angle1, angle2)
+        # Compute the absolute angles from the state to each endpoint.
+        angle1 = math.atan2(geometry.coords[0][1] - state[1, 0],
+                            geometry.coords[0][0] - state[0, 0])
+        angle2 = math.atan2(geometry.coords[1][1] - state[1, 0],
+                            geometry.coords[1][0] - state[0, 0])
 
-        # adjust angles to be in range 0 to 2pi
-        angle_min = angle_min % (2 * math.pi)
-        angle_max = angle_max % (2 * math.pi)
+        # Convert these angles to be relative to the state's orientation and wrap to [0, 2π)
+        angle1 = (angle1 - state[2, 0]) % (2 * math.pi)
+        angle2 = (angle2 - state[2, 0]) % (2 * math.pi)
 
-        # find the index of the angle
-        angle_min_index = math.floor(angle_min / self.angle_inc) + 1
-        if angle_min_index == self.number:
-            angle_min_index = 0
+        # Determine the smaller angular interval between the two endpoints.
+        diff = (angle2 - angle1) % (2 * math.pi)
+        if diff > math.pi:
+            # The smaller arc is from angle2 to angle1 (wrapping through 0)
+            angle_min = angle2
+            angle_max = angle1
+        else:
+            angle_min = angle1
+            angle_max = angle2
+
+        # Determine the corresponding indices in your range_data.
+        # (Adjust these if your array indexing is different.)
+        angle_min_index = math.floor(angle_min / self.angle_inc)
         angle_max_index = math.floor(angle_max / self.angle_inc)
-        if angle_max_index == self.number:
-            angle_max_index = 0
 
-        # update range data
+
+        # Update range_data by checking every ray within the angular interval.
         if angle_min_index <= angle_max_index:
+            # No wrap-around: update directly
             for i in range(angle_min_index, angle_max_index + 1):
                 angle = self.angle_list[i] + state[2, 0]
-                dist = self.find_intersection_dist_linestring(state, angle, obj.geometry.coords)
-                if dist < self.range_data[i]:
-                    self.range_data[i] = dist
-        elif angle_min_index - angle_max_index > 1: # to prevent perfectly radial lines from causing errors
+                dist = self.find_intersection_dist_linestring(state, angle, geometry.coords)
+                self.range_data[i] = min(self.range_data[i], dist)
+        else:
+            # Wrap-around: update from angle_min_index to the end, and from 0 to angle_max_index.
             for i in range(angle_min_index, self.number):
                 angle = self.angle_list[i] + state[2, 0]
-                dist = self.find_intersection_dist_linestring(state, angle, obj.geometry.coords)
-                if dist < self.range_data[i]:
-                    self.range_data[i] = dist
+                dist = self.find_intersection_dist_linestring(state, angle, geometry.coords)
+                self.range_data[i] = min(self.range_data[i], dist)
             for i in range(0, angle_max_index + 1):
                 angle = self.angle_list[i] + state[2, 0]
-                dist = self.find_intersection_dist_linestring(state, angle, obj.geometry.coords)
-                if dist < self.range_data[i]:
-                    self.range_data[i] = dist
+                dist = self.find_intersection_dist_linestring(state, angle, geometry.coords)
+                self.range_data[i] = min(self.range_data[i], dist)
     
     def find_intersection_dist_linestring(self, state, angle, obj_coords):
         # find the intersection point
