@@ -13,7 +13,7 @@ from rl.policy.actor_critic import ActorCritic
 import matplotlib
 
 from rl.policy_train.multi_ppo_barn_dataset import multi_ppo_barn
-matplotlib.use('MacOSX')
+matplotlib.use('Agg')
 
 # path set
 cur_path = Path(__file__).parent
@@ -72,7 +72,7 @@ par_train.add_argument('--clip_ratio', default=0.2)
 par_train.add_argument('--train_pi_iters', default=50)
 par_train.add_argument('--train_v_iters', default=50)
 par_train.add_argument('--target_kl',type=float, default=0.05)
-par_train.add_argument('--render', default=True)
+par_train.add_argument('--render', default=False)
 par_train.add_argument('--render_freq', default=1)
 par_train.add_argument('--con_train', action='store_true')
 par_train.add_argument('--seed', default=7)

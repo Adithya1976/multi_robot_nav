@@ -29,7 +29,10 @@ class ActorCritic(nn.Module):
         elif device == 'cuda':
             torch.cuda.synchronize()
         
-        obs_dim = (dilnet_hidden_dim + state_dim)
+        if mode != 'GNN':
+            obs_dim = (dilnet_hidden_dim + state_dim)
+        else:
+            obs_dim = dilnet_hidden_dim
 
         dil_net = DILNet(state_dim, dilnet_input_dim, dilnet_hidden_dim, device=device, mode=mode)
 
@@ -65,6 +68,7 @@ class GaussianActor(nn.Module):
 
         self.dil_net = dil_net
         self.device = device
+
         self.net_out=mlp([obs_dim] + list(hidden_sizes) + [act_dim], activation, output_activation)
 
         log_std = -1 * np.ones(act_dim, dtype=np.float32)

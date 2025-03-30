@@ -55,14 +55,14 @@ par_policy.add_argument('--hidden_sizes_v', type=tuple, default=(256, 256))  # 1
 par_policy.add_argument('--activation', default=nn.ReLU)
 par_policy.add_argument('--output_activation', default=nn.Tanh)
 par_policy.add_argument('--output_activation_v', default=nn.Identity) 
-par_policy.add_argument('--mode', default='BiGRU')   # LSTM
+par_policy.add_argument('--mode', default='GNN')   # LSTM
 
 par_train = parser.add_argument_group('par train', 'train parameters') 
 par_train.add_argument('--pi_lr', type=float, default=4e-6)
 par_train.add_argument('--vf_lr', type=float, default=5e-5)
 par_train.add_argument('--train_epoch', type=int, default=250)
 par_train.add_argument('--steps_per_epoch', type=int, default=500)
-par_train.add_argument('--device', default='mps')
+par_train.add_argument('--device', default='cpu')
 par_train.add_argument('--max_ep_len', default=150)
 par_train.add_argument('--gamma', default=0.99)
 par_train.add_argument('--lam', default=0.97)
@@ -85,14 +85,13 @@ par_train.add_argument('--save_result', type=bool, default=True)
 par_train.add_argument('--lr_decay_epoch', type=int, default=1000)
 par_train.add_argument('--max_update_num', type=int, default=10)
 
-args = parser.parse_args(['--train_epoch', '1500'])
+args = parser.parse_args(['--train_epoch', '150'])
 # decide the model path and model name 
 model_path_check = args.save_path + args.save_name + str(args.robot_number) + '_{}'
 model_name_check = args.save_name + str(args.robot_number) +  '_{}'
 while os.path.isdir(model_path_check.format(counter)):
     counter+=1
 
-args.con_train = True
 device = args.device
 
 model_abs_path = model_path_check.format(counter) + '/'
