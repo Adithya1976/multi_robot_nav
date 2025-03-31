@@ -6,8 +6,7 @@ import scipy
 import scipy.signal
 import time
 import os
-from custrom_env.vo_env import VOEnv
-from gym_env.envs import ir_gym
+from custom_env.vo_env import VOEnv
 from rl.policy.actor_critic import ActorCritic
 from rl.policy_test.post_train import post_train
 import threading

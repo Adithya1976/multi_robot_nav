@@ -3,8 +3,7 @@ import sys
 import gym
 import pickle
 import shutil
-from custrom_env.vo_env import VOEnv
-import gym_env
+from custom_env.vo_env import VOEnv
 import argparse
 from torch import nn
 from pathlib import Path

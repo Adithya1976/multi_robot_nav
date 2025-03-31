@@ -2,7 +2,6 @@ import torch
 import numpy as np
 from pathlib import Path
 import platform
-from gym_env.envs import mrnav
 from rl.policy.actor_critic import ActorCritic
 from math import pi, sin, cos, sqrt
 import time 
@@ -10,7 +9,7 @@ import time
 class post_train:
     def __init__(self, env, num_episodes=100, max_ep_len=150, acceler_vel = 1.0, reset_mode=3, render=True, save=False, neighbor_region=4, neighbor_num=5, args=None, device='mps', **kwargs):
 
-        self.env: mrnav = env
+        self.env = env
         self.num_episodes=num_episodes
         self.max_ep_len = max_ep_len
         self.acceler_vel = acceler_vel

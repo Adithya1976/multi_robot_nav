@@ -4,8 +4,8 @@ from typing import Dict, List
 
 import numpy as np
 from sympy import Li
-from custrom_env.perception_info import CircularObstacle, LidarCluster, PerceptionInfo
-from custrom_env.simulated_lidar import SimulatedLidar2D
+from custom_env.perception_info import CircularObstacle, LidarCluster, PerceptionInfo
+from custom_env.simulated_lidar import SimulatedLidar2D
 from irsim.world.object_base import ObjectBase
 from irsim.world.robots.robot_diff import RobotDiff
 

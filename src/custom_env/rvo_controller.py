@@ -2,7 +2,7 @@ from math import asin, atan2, cos, inf, pi, sin, sqrt
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-from custrom_env.perception_info import CircularObstacle, LidarCluster, PerceptionInfo
+from custom_env.perception_info import CircularObstacle, LidarCluster, PerceptionInfo
 import concurrent.futures
 
 

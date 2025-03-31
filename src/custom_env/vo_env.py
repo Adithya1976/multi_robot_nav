@@ -5,10 +5,10 @@ from typing import Dict, List
 from gym import spaces
 import numpy as np
 
-from custrom_env import vo_robot
-from custrom_env.perception_info import LidarCluster, PerceptionInfo
-from custrom_env.rvo_controller import VOController
-from custrom_env.vo_robot import VORobot
+from custom_env import vo_robot
+from custom_env.perception_info import LidarCluster, PerceptionInfo
+from custom_env.rvo_controller import VOController
+from custom_env.vo_robot import VORobot
 from irsim.env import EnvBase
 from irsim.world.robots.robot_diff import RobotDiff
 import concurrent.futures
