@@ -1,9 +1,8 @@
 import gym
-import gym_env
 from pathlib import Path
 import pickle
 import sys
-from custrom_env.vo_env import VOEnv
+from custom_env.vo_env import VOEnv
 from rl.policy_test.post_train_barn import post_train
 import argparse
 import os

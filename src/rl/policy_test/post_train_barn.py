@@ -3,8 +3,7 @@ import torch
 import numpy as np
 from pathlib import Path
 import platform
-from custrom_env.vo_env import VOEnv
-from gym_env.envs import mrnav
+from custom_env.vo_env import VOEnv
 from rl.policy.actor_critic import ActorCritic
 from math import pi, sin, cos, sqrt
 import time 
