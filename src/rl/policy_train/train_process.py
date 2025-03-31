@@ -14,7 +14,7 @@ matplotlib.use('Agg')
 
 # path set
 cur_path = Path(__file__).parent
-world_abs_path = str(cur_path/'train_world.yaml')
+world_abs_path = str(cur_path/'custom_env.yaml')
 
 # default
 # robot_number = 4
@@ -26,7 +26,7 @@ parser = argparse.ArgumentParser(description='drl rvo parameters')
 
 par_env = parser.add_argument_group('par env', 'environment parameters') 
 par_env.add_argument('--env_name', default='mrnav-v1')
-par_env.add_argument('--world_path', default='train_world.yaml') # dynamic_obs_test.yaml; train_world.yaml
+par_env.add_argument('--world_path', default='custom_env.yaml') # dynamic_obs_test.yaml; train_world.yaml
 par_env.add_argument('--robot_number', type=int, default=5)
 par_env.add_argument('--init_mode', default=3)
 par_env.add_argument('--reset_mode', default=3)
@@ -118,7 +118,7 @@ with open(model_abs_path+model_name+'.txt', 'w') as p:
     print(vars(args), file=p)
 p.close()
 
-shutil.copyfile( str(cur_path/'train_world.yaml'), model_abs_path+model_name+'_world.yaml')
+shutil.copyfile( str(cur_path/'custom_env.yaml'), model_abs_path+model_name+'_world.yaml')
 
 # run the training loop
 ppo.training_loop()
