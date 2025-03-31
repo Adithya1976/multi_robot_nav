@@ -1,0 +1,389 @@
+action-msgs==1.2.0
+action-tutorials-interfaces==0.20.2
+action-tutorials-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-action-tutorials-py_1661043052060/work/ros-humble-action-tutorials-py/src/work
+actionlib-msgs==4.2.2
+aiohappyeyeballs==2.4.6
+aiohttp==3.11.13
+aiosignal==1.3.2
+ament-cmake-test==1.3.2
+ament-copyright @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-copyright_1656762462692/work/ros-humble-ament-copyright/src/work
+ament-cppcheck @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-cppcheck_1656759614663/work/ros-humble-ament-cppcheck/src/work
+ament-cpplint @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-cpplint_1656763158759/work/ros-humble-ament-cpplint/src/work
+ament-flake8 @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-flake8_1656761329883/work/ros-humble-ament-flake8/src/work
+ament-index-python @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-index-python_1656763208705/work/ros-humble-ament-index-python/src/work
+ament-lint @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-lint_1656759381961/work/ros-humble-ament-lint/src/work
+ament-lint-cmake @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-lint-cmake_1656762963734/work/ros-humble-ament-lint-cmake/src/work
+ament-package @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-package_1656758749112/work/ros-humble-ament-package/src/work
+ament-pep257 @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-pep257_1656761959913/work/ros-humble-ament-pep257/src/work
+ament-uncrustify @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-uncrustify_1656764407732/work/ros-humble-ament-uncrustify/src/work
+ament-xmllint @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ament-xmllint_1656763106746/work/ros-humble-ament-xmllint/src/work
+anaconda-anon-usage @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_60q98_n2ty/croot/anaconda-anon-usage_1732732446690/work
+angles==1.15.0
+annotated-types==0.7.0
+anyio==4.8.0
+appnope==0.1.4
+archspec @ file:///croot/archspec_1709217642129/work
+argcomplete @ file:///home/conda/feedstock_root/build_artifacts/argcomplete_1742703822879/work
+asgiref==3.8.1
+asttokens==3.0.0
+async-timeout==4.0.3
+attrs==25.1.0
+backcall==0.2.0
+backoff==2.2.1
+bcrypt==4.2.1
+beautifulsoup4==4.13.3
+bleach==6.2.0
+boltons @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_f63n9uulmp/croot/boltons_1677628710094/work
+Brotli @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_27zk0eqdh0/croot/brotli-split_1714483157007/work
+build==1.2.2.post1
+builtin-interfaces==1.2.0
+cachetools==5.5.2
+catkin_pkg @ file:///home/conda/feedstock_root/build_artifacts/catkin_pkg_1734127209424/work
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1739515848642/work/certifi
+cffi @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_06ndtibm2c/croot/cffi_1726856446111/work
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+chroma-hnswlib==0.7.6
+chromadb==0.6.3
+click==8.1.8
+cloudpickle==3.1.1
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1733218098505/work
+coloredlogs==15.0.1
+comm==0.2.2
+composition-interfaces==1.2.0
+conda==4.14.0
+conda-anaconda-telemetry @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_3cfn48l126/croot/conda-anaconda-telemetry_1733258799801/work
+conda-content-trust @ file:///home/conda/feedstock_root/build_artifacts/conda-content-trust_1621370699668/work
+conda-libmamba-solver @ file:///home/conda/feedstock_root/build_artifacts/conda-libmamba-solver_1661504709328/work
+conda-package-handling @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_82jv6q9ech/croot/conda-package-handling_1731369032774/work
+conda_package_streaming @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_2el5nlypud/croot/conda-package-streaming_1731366187356/work
+contourpy @ file:///Users/runner/miniforge3/conda-bld/contourpy_1729602398863/work
+cppcheck==0.0.0
+cryptography @ file:///Users/runner/miniforge3/conda-bld/cryptography-split_1672673285537/work
+cv-bridge==3.2.1
+cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1733332471406/work
+dataclasses-json==0.6.7
+debugpy==1.8.13
+decorator==5.2.1
+defusedxml==0.7.1
+demo-nodes-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-demo-nodes-py_1661045097254/work/ros-humble-demo-nodes-py/src/work
+Deprecated==1.2.18
+diagnostic-msgs==4.2.2
+distro @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_ddkyz0575y/croot/distro_1714488254309/work
+docopt==0.6.2
+docutils @ file:///home/conda/feedstock_root/build_artifacts/docutils_1733217766141/work
+domain-coordinator @ file:///Users/runner/mambaforge/conda-bld/ros-humble-domain-coordinator_1656762877016/work/ros-humble-domain-coordinator/src/work
+durationpy==0.9
+empy==3.3.4
+example-interfaces==0.9.3
+examples-rclpy-executors @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-executors_1661043088368/work/ros-humble-examples-rclpy-executors/src/work
+examples-rclpy-minimal-action-client @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-action-client_1661043009914/work/ros-humble-examples-rclpy-minimal-action-client/src/work
+examples-rclpy-minimal-action-server @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-action-server_1661042936754/work/ros-humble-examples-rclpy-minimal-action-server/src/work
+examples-rclpy-minimal-client @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-client_1661042780338/work/ros-humble-examples-rclpy-minimal-client/src/work
+examples-rclpy-minimal-publisher @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-publisher_1661042692795/work/ros-humble-examples-rclpy-minimal-publisher/src/work
+examples-rclpy-minimal-service @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-service_1661042645671/work/ros-humble-examples-rclpy-minimal-service/src/work
+examples-rclpy-minimal-subscriber @ file:///Users/runner/mambaforge/conda-bld/ros-humble-examples-rclpy-minimal-subscriber_1661042589260/work/ros-humble-examples-rclpy-minimal-subscriber/src/work
+exceptiongroup @ file:///home/conda/feedstock_root/build_artifacts/exceptiongroup_1733208806608/work
+executing==2.2.0
+fastapi==0.115.9
+fastjsonschema==2.21.1
+filelock==3.17.0
+flake8 @ file:///home/conda/feedstock_root/build_artifacts/flake8_1739898391164/work
+flatbuffers==25.2.10
+fonttools @ file:///Users/runner/miniforge3/conda-bld/fonttools_1738940323940/work
+frozendict @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_8b0cest_id/croot/frozendict_1713194839836/work
+frozenlist==1.5.0
+fsspec==2025.2.0
+geometry-msgs==4.2.2
+google-auth==2.38.0
+googleapis-common-protos==1.68.0
+grpcio==1.70.0
+gym==0.26.2
+gym-notices==0.0.8
+h11==0.14.0
+httpcore==1.0.7
+httptools==0.6.4
+httpx==0.28.1
+httpx-sse==0.4.0
+huggingface-hub==0.29.1
+humanfriendly==10.0
+idna @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_a12xpo84t2/croot/idna_1714398852854/work
+image-geometry==3.2.1
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+importlib_metadata==8.5.0
+importlib_resources @ file:///home/conda/feedstock_root/build_artifacts/importlib_resources_1736252299705/work
+iniconfig @ file:///home/conda/feedstock_root/build_artifacts/iniconfig_1733223141826/work
+interactive-markers==2.3.2
+ipykernel==6.29.5
+ipython==8.12.3
+ir-sim==2.3.2
+jedi==0.19.2
+Jinja2==3.1.6
+jiter==0.8.2
+jsonpatch @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_3ajyoz8zoj/croot/jsonpatch_1714483362270/work
+jsonpointer==2.1
+jsonschema==4.23.0
+jsonschema-specifications==2024.10.1
+jupyter_client==8.6.3
+jupyter_core==5.7.2
+jupyterlab_pygments==0.3.0
+kiwisolver @ file:///Users/runner/miniforge3/conda-bld/kiwisolver_1725459226886/work
+kubernetes==32.0.1
+langchain==0.3.19
+langchain-community==0.3.18
+langchain-core==0.3.40
+langchain-openai==0.3.7
+langchain-text-splitters==0.3.6
+langchainhub==0.1.21
+langsmith==0.3.11
+lark-parser @ file:///home/conda/feedstock_root/build_artifacts/lark-parser_1725742324642/work
+laser-geometry==2.4.0
+launch @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch_1656763632820/work/ros-humble-launch/src/work
+launch-ros @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch-ros_1661042207309/work/ros-humble-launch-ros/src/work
+launch-testing @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch-testing_1656764851506/work/ros-humble-launch-testing/src/work
+launch-testing-ros @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch-testing-ros_1661044739850/work/ros-humble-launch-testing-ros/src/work
+launch-xml @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch-xml_1656764505911/work/ros-humble-launch-xml/src/work
+launch-yaml @ file:///Users/runner/mambaforge/conda-bld/ros-humble-launch-yaml_1656764458252/work/ros-humble-launch-yaml/src/work
+libmambapy @ file:///Users/runner/miniforge3/conda-bld/mamba-split_1661285844041/work/libmambapy
+lifecycle-msgs==1.2.0
+logging-demo==0.20.2
+loguru @ file:///Users/runner/miniforge3/conda-bld/loguru_1725349728571/work
+lxml @ file:///Users/runner/miniforge3/conda-bld/lxml_1656759438496/work
+mamba @ file:///Users/runner/miniforge3/conda-bld/mamba-split_1661285844041/work/mamba
+map-msgs==2.1.0
+markdown-it-py==3.0.0
+MarkupSafe==3.0.2
+marshmallow==3.26.1
+matplotlib==3.9.0
+matplotlib-inline==0.1.7
+mccabe @ file:///home/conda/feedstock_root/build_artifacts/mccabe_1733216466933/work
+mdurl==0.1.2
+menuinst @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_46xe5v9lzp/croot/menuinst_1731364926974/work
+message-filters==4.3.2
+mistune==3.1.3
+mmh3==5.1.0
+monotonic==1.6
+mpmath==1.3.0
+multidict==6.1.0
+munkres==1.1.4
+mypy-extensions==1.0.0
+nav-msgs==4.2.2
+nbclient==0.10.2
+nbconvert==7.16.6
+nbformat==5.10.4
+nest-asyncio==1.6.0
+netifaces @ file:///Users/runner/miniforge3/conda-bld/netifaces_1735935115539/work
+networkx==3.2.1
+numpy @ file:///Users/runner/miniforge3/conda-bld/numpy_1707225689808/work/dist/numpy-1.26.4-cp39-cp39-macosx_11_0_arm64.whl#sha256=989042d872faf31c0434bd99fec5ec09b5c5d9a0b8125edd0ae869c5d8851048
+oauthlib==3.2.2
+onnxruntime==1.19.2
+openai==1.65.1
+opencv-python==4.5.5
+opentelemetry-api==1.30.0
+opentelemetry-exporter-otlp-proto-common==1.30.0
+opentelemetry-exporter-otlp-proto-grpc==1.30.0
+opentelemetry-instrumentation==0.51b0
+opentelemetry-instrumentation-asgi==0.51b0
+opentelemetry-instrumentation-fastapi==0.51b0
+opentelemetry-proto==1.30.0
+opentelemetry-sdk==1.30.0
+opentelemetry-semantic-conventions==0.51b0
+opentelemetry-util-http==0.51b0
+orjson==3.10.15
+osrf-pycommon @ file:///Users/runner/mambaforge/conda-bld/ros-humble-osrf-pycommon_1656759665892/work/ros-humble-osrf-pycommon/src/work
+overrides==7.7.0
+packaging @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_81ri4yfpjw/croot/packaging_1720101866878/work
+pandas==2.2.3
+pandocfilters==1.5.1
+parso==0.8.4
+pcl-msgs==1.0.0
+pendulum-msgs==0.20.2
+pep517 @ file:///home/conda/feedstock_root/build_artifacts/pep517_1667916641627/work
+pexpect==4.9.0
+pickleshare==0.7.5
+Pillow @ file:///Users/runner/miniforge3/conda-bld/pillow_1666920692505/work
+pipreqs==0.5.0
+platformdirs @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_a8u4fy8k9o/croot/platformdirs_1692205661656/work
+pluggy @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_bei6q1cvvt/croot/pluggy_1733169621717/work
+ply @ file:///home/conda/feedstock_root/build_artifacts/ply_1733239724146/work
+posthog==3.17.0
+prompt_toolkit==3.0.50
+propcache==0.3.0
+protobuf==5.29.3
+psutil @ file:///Users/runner/miniforge3/conda-bld/psutil_1740663174295/work
+ptyprocess==0.7.0
+pure_eval==0.2.3
+pyasn1==0.6.1
+pyasn1_modules==0.4.1
+pybind11 @ file:///D:/bld/pybind11-split_1730237329882/work
+pybind11_global @ file:///home/conda/feedstock_root/build_artifacts/pybind11-split_1730237328107/work
+pybullet @ file:///Users/runner/miniforge3/conda-bld/bullet_1683006017837/work
+pycairo==1.25.0
+pycodestyle @ file:///home/conda/feedstock_root/build_artifacts/pycodestyle_1733216196861/work
+pycosat @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_19qelmdbl6/croot/pycosat_1714510743067/work
+pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
+pydantic==2.10.6
+pydantic-settings==2.8.1
+pydantic_core==2.27.2
+pydocstyle @ file:///home/conda/feedstock_root/build_artifacts/pydocstyle_1733261631732/work
+pydot @ file:///Users/runner/miniforge3/conda-bld/pydot_1737244101674/work
+pyflakes @ file:///home/conda/feedstock_root/build_artifacts/pyflakes_1733216066937/work
+Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1641580240686/work
+pynput==1.8.1
+pyobjc-core==11.0
+pyobjc-framework-ApplicationServices==11.0
+pyobjc-framework-Cocoa==11.0
+pyobjc-framework-CoreText==11.0
+pyobjc-framework-Quartz==11.0
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1685514481738/work
+pyparsing==3.2.1
+PyPika==0.48.9
+pyproject_hooks==1.2.0
+PyQt-builder @ file:///home/conda/feedstock_root/build_artifacts/pyqt-builder_1742182012244/work
+PyQt5-sip==12.11.0
+PySocks @ file:///Users/ktietz/Code/oss/ci_pkgs/pysocks_1626781349491/work
+pytest @ file:///home/conda/feedstock_root/build_artifacts/pytest_1740946542080/work
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1733215673016/work
+python-dotenv==1.0.1
+python-qt-binding==1.1.1
+pytz==2025.1
+PyYAML @ file:///Users/runner/miniforge3/conda-bld/pyyaml_1737454732336/work
+pyzmq==26.3.0
+qt-dotgraph==2.2.2
+qt-gui==2.2.2
+qt-gui-cpp==2.2.2
+qt-gui-py-common==2.2.2
+quality-of-service-demo-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-quality-of-service-demo-py_1661042230790/work/ros-humble-quality-of-service-demo-py/src/work
+rcl-interfaces==1.2.0
+rclpy==3.3.4
+rcutils==5.1.1
+referencing==0.36.2
+regex==2024.11.6
+requests @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_ee45nsd33z/croot/requests_1730999134038/work
+requests-oauthlib==2.0.0
+requests-toolbelt==1.0.0
+resource-retriever==3.1.0
+rich==13.9.4
+rmw-dds-common==1.6.0
+ros2action @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2action_1661045944172/work/ros-humble-ros2action/src/work
+ros2bag @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2bag_1661057905407/work/ros-humble-ros2bag/src/work
+ros2cli @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2cli_1661042655223/work/ros-humble-ros2cli/src/work
+ros2component @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2component_1661050458359/work/ros-humble-ros2component/src/work
+ros2doctor @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2doctor_1661046347006/work/ros-humble-ros2doctor/src/work
+ros2interface @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2interface_1661046263666/work/ros-humble-ros2interface/src/work
+ros2launch @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2launch_1661048217734/work/ros-humble-ros2launch/src/work
+ros2lifecycle @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2lifecycle_1661048651567/work/ros-humble-ros2lifecycle/src/work
+ros2multicast @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2multicast_1661044947028/work/ros-humble-ros2multicast/src/work
+ros2node @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2node_1661046179001/work/ros-humble-ros2node/src/work
+ros2param @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2param_1661048587436/work/ros-humble-ros2param/src/work
+ros2pkg @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2pkg_1661045944455/work/ros-humble-ros2pkg/src/work
+ros2run @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2run_1661048513820/work/ros-humble-ros2run/src/work
+ros2service @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2service_1661046093725/work/ros-humble-ros2service/src/work
+ros2topic @ file:///Users/runner/mambaforge/conda-bld/ros-humble-ros2topic_1661046755374/work/ros-humble-ros2topic/src/work
+rosbag2-interfaces==0.15.2
+rosbag2-py==0.15.2
+rosdistro @ file:///Users/runner/miniforge3/conda-bld/rosdistro_1725535795228/work
+rosgraph-msgs==1.2.0
+rosidl-adapter==3.1.3
+rosidl-cli @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rosidl-cli_1656763692106/work/ros-humble-rosidl-cli/src/work
+rosidl-cmake==3.1.3
+rosidl-generator-c==3.1.3
+rosidl-generator-cpp==3.1.3
+rosidl-generator-py==0.14.2
+rosidl-parser==3.1.3
+rosidl-runtime-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rosidl-runtime-py_1661038296634/work/ros-humble-rosidl-runtime-py/src/work
+rosidl-typesupport-c==2.0.0
+rosidl-typesupport-cpp==2.0.0
+rosidl-typesupport-fastrtps-c==2.2.0
+rosidl-typesupport-fastrtps-cpp==2.2.0
+rosidl-typesupport-introspection-c==3.1.3
+rosidl-typesupport-introspection-cpp==3.1.3
+rospkg @ file:///home/conda/feedstock_root/build_artifacts/rospkg_1737835673703/work
+rpds-py==0.24.0
+rpyutils @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rpyutils_1656763753818/work/ros-humble-rpyutils/src/work
+rqt-action @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-action_1661049632330/work/ros-humble-rqt-action/src/work
+rqt-bag @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-bag_1661057399467/work/ros-humble-rqt-bag/src/work
+rqt-bag-plugins @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-bag-plugins_1661063471210/work/ros-humble-rqt-bag-plugins/src/work
+rqt-console @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-console_1661046109749/work/ros-humble-rqt-console/src/work
+rqt-graph @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-graph_1665434099304/work/ros-humble-rqt-graph/src/work
+rqt-gui @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-gui_1661042742489/work/ros-humble-rqt-gui/src/work
+rqt-gui-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-gui-py_1661044727599/work/ros-humble-rqt-gui-py/src/work
+rqt-msg @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-msg_1665433752763/work/ros-humble-rqt-msg/src/work
+rqt-plot @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-plot_1661046470832/work/ros-humble-rqt-plot/src/work
+rqt-publisher @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-publisher_1661048236165/work/ros-humble-rqt-publisher/src/work
+rqt-py-common==1.1.4
+rqt-py-console @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-py-console_1661046523829/work/ros-humble-rqt-py-console/src/work
+rqt-reconfigure @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-reconfigure_1665434025193/work/ros-humble-rqt-reconfigure/src/work
+rqt-service-caller @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-service-caller_1661046472500/work/ros-humble-rqt-service-caller/src/work
+rqt-shell @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-shell_1661046421129/work/ros-humble-rqt-shell/src/work
+rqt-srv @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-srv_1661049564491/work/ros-humble-rqt-srv/src/work
+rqt-topic @ file:///Users/runner/mambaforge/conda-bld/ros-humble-rqt-topic_1665433828946/work/ros-humble-rqt-topic/src/work
+rsa==4.9
+ruamel-yaml-conda @ file:///Users/runner/miniforge3/conda-bld/ruamel_yaml_1695546309954/work
+ruamel.yaml @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_35yvtl3p84/croot/ruamel.yaml_1727980165481/work
+ruamel.yaml.clib @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_70l_orv46q/croot/ruamel.yaml.clib_1727769819918/work
+scipy==1.13.1
+sensor-msgs==4.2.2
+sensor-msgs-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-sensor-msgs-py_1661039029644/work/ros-humble-sensor-msgs-py/src/work
+shape-msgs==4.2.2
+shapely==2.0.6
+shellingham==1.5.4
+sip @ file:///Users/runner/miniforge3/conda-bld/sip_1742163336423/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1733380938961/work
+sniffio==1.3.1
+snowballstemmer @ file:///home/conda/feedstock_root/build_artifacts/snowballstemmer_1637143057757/work
+soupsieve==2.6
+SQLAlchemy==2.0.38
+sros2 @ file:///Users/runner/mambaforge/conda-bld/ros-humble-sros2_1661051090464/work/ros-humble-sros2/src/work
+stack-data==0.6.3
+starlette==0.45.3
+statistics-msgs==1.2.0
+std-msgs==4.2.2
+std-srvs==4.2.2
+stereo-msgs==4.2.2
+sympy==1.13.3
+tabulate==0.9.0
+teleop-twist-keyboard @ file:///Users/runner/mambaforge/conda-bld/ros-humble-teleop-twist-keyboard_1661045418651/work/ros-humble-teleop-twist-keyboard/src/work
+tenacity==9.0.0
+tf2-geometry-msgs==0.25.1
+tf2-kdl==0.25.1
+tf2-msgs==0.25.1
+tf2-py==0.25.1
+tf2-ros-py @ file:///Users/runner/mambaforge/conda-bld/ros-humble-tf2-ros-py_1661045050413/work/ros-humble-tf2-ros-py/src/work
+tf2-tools @ file:///Users/runner/mambaforge/conda-bld/ros-humble-tf2-tools_1661046217797/work/ros-humble-tf2-tools/src/work
+tiktoken==0.9.0
+tinycss2==1.4.0
+tokenizers==0.21.0
+toml @ file:///home/conda/feedstock_root/build_artifacts/toml_1734091811753/work
+tomli @ file:///home/conda/feedstock_root/build_artifacts/tomli_1733256695513/work
+toolz @ file:///home/conda/feedstock_root/build_artifacts/toolz_1733736030883/work
+topic-monitor @ file:///Users/runner/mambaforge/conda-bld/ros-humble-topic-monitor_1661045427602/work/ros-humble-topic-monitor/src/work
+torch==2.6.0
+torch-geometric==2.6.1
+tornado==6.4.2
+tqdm @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_24zjwympsr/croot/tqdm_1724853942429/work
+traitlets==5.14.3
+trajectory-msgs==4.2.2
+turtlesim==1.4.2
+typer==0.15.2
+types-requests==2.32.0.20241016
+typing-inspect==0.9.0
+typing_extensions==4.12.2
+tzdata==2025.1
+unicodedata2 @ file:///Users/runner/miniforge3/conda-bld/unicodedata2_1736692557404/work
+unique-identifier-msgs==2.2.1
+urllib3 @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_06_m8gdsy6/croot/urllib3_1727769822458/work
+uvicorn==0.34.0
+uvloop==0.21.0
+visualization-msgs==4.2.2
+vtk==9.1.0
+watchfiles==1.0.4
+wcwidth==0.2.13
+webencodings==0.5.1
+websocket-client==1.8.0
+websockets==15.0
+wrapt==1.17.2
+yarg==0.1.9
+yarl==1.18.3
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1732827521216/work
+zstandard @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_a5_i6g4o6n/croot/zstandard_1731356352787/work
