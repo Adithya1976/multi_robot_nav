@@ -8,7 +8,6 @@ import argparse
 import os
 from os.path import dirname, abspath
 import matplotlib
-matplotlib.use('MacOSX')
 
 os.environ["KMP_DUPLICATE_LIB_OK"]  =  "TRUE"
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
