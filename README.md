@@ -1,5 +1,5 @@
 
-# Multi-Robot RL Simulator
+# Learning to Avoid: Decentralized Multi-Robot Navigation from LiDAR Using PPO and Reciprocal Velocity Obstacles
 
 This project builds on top of the [irsim](https://github.com/robot-perception-group/irsim) simulator. The original simulator was cloned and extended to support reinforcement learning (RL) for multi-robot navigation tasks.
 
