@@ -1,16 +1,26 @@
+import os
 import torch
 import numpy as np
 from pathlib import Path
 import platform
+from custrom_env.vo_env import VOEnv
 from gym_env.envs import mrnav
 from rl.policy.actor_critic import ActorCritic
 from math import pi, sin, cos, sqrt
 import time 
 
-class post_train:
-    def __init__(self, env, num_episodes=100, max_ep_len=150, acceler_vel = 1.0, reset_mode=3, render=True, save=False, neighbor_region=4, neighbor_num=5, args=None, device='mps', **kwargs):
+def env_sampler():
+    # get random number between 0 and 17 both included
+    i = np.random.randint(0, 18)
+    # get parent folder path
+    cur_path = Path(__file__).parent
+    world_abs_path = os.path.join(cur_path, "world_dataset", f'world_0.yaml')
+    return VOEnv(world_abs_path, 'lidar')
 
-        self.env: mrnav = env
+class post_train:
+    def __init__(self, num_episodes=100, max_ep_len=150, acceler_vel = 1.0, reset_mode=3, render=True, save=False, neighbor_region=4, neighbor_num=5, args=None, device='mps', **kwargs):
+
+        self.env = env_sampler()
         self.num_episodes=num_episodes
         self.max_ep_len = max_ep_len
         self.acceler_vel = acceler_vel
@@ -38,7 +48,7 @@ class post_train:
         if policy_type == 'drl':
             model_action = self.load_policy(policy_path, self.std_factor, policy_dict=policy_dict)
 
-        o, r, d, ep_ret, ep_len, n = self.env.reset(random_ori=True), 0, False, 0, 0, 0
+        o, r, d, ep_ret, ep_len, n = self.env.reset(), 0, False, 0, 0, 0
         ep_ret_list, speed_list, mean_speed_list, ep_len_list, sn = [], [], [], [], 0
 
         print('Policy Test Start !')
@@ -59,7 +69,6 @@ class post_train:
                 for i in range(self.robot_number):
 
                     start_time = time.time()
-                    
                     a_inc = np.round(model_action(o[i]), 2)
                     end_time = time.time()
 
@@ -93,7 +102,9 @@ class post_train:
                 mean_speed_list.append(speed)
                 speed_list = []
 
-                o, r, d, ep_ret, ep_len = self.env.reset(random_ori=True), 0, False, 0, 0
+                self.env.end()
+                self.env = env_sampler()
+                o, r, d, ep_ret, ep_len = self.env.reset(), 0, False, 0, 0
 
                 n += 1
 
