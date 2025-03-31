@@ -13,7 +13,7 @@ def env_sampler():
     i = np.random.randint(0, 18)
     # get parent folder path
     cur_path = Path(__file__).parent
-    world_abs_path = os.path.join(cur_path, "world_dataset", f'world_0.yaml')
+    world_abs_path = os.path.join(cur_path, "world_dataset", f'world_{i}.yaml')
     return VOEnv(world_abs_path, 'lidar')
 
 class post_train:
