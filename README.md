@@ -67,7 +67,7 @@ python policy_test.py
 
 ## 🛫 Using the BARN Dataset
 
-1. Download the BARN dataset from the specified link (to be provided) and place it inside the `./src/barn/` directory. Rename the downloaded folder to `datasets`.
+1. Download the BARN dataset from the specified link ([barn dataset](https://www.cs.utexas.edu/~xiao/BARN/BARN.html)) and place it inside the `./src/barn/` directory. Rename the downloaded folder to `datasets`.
 2. Navigate to the dataset script directory:
 
 ```bash
