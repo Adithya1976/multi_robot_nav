@@ -153,8 +153,8 @@ class VOController:
         mvx, mvy = obstacle.velocity
         mr = obstacle.radius + self.safety_distance
 
-        if mvx < 0.05 and mvy < 0.05:
-            mode = "vo"
+        # if mvx < 0.05 and mvy < 0.05:
+        #     mode = "vo"
 
         rel_x = x - mx
         rel_y = y - my

@@ -1,4 +1,3 @@
-
 # Learning to Avoid: Decentralized Multi-Robot Navigation from LiDAR Using PPO and Reciprocal Velocity Obstacles
 
 This project builds on top of the [irsim](https://github.com/robot-perception-group/irsim) simulator. The original simulator was cloned and extended to support reinforcement learning (RL) for multi-robot navigation tasks.
@@ -38,7 +37,7 @@ export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 cd ./src/rl/policy_train/
 ```
 
-2. Edit the `custom_env.yaml` file in this directory to configure the number of robots and other environment settings.
+2. Edit the `custom_env.yaml` file in this directory to configure the number of robots.
 3. Start the training process:
 
 ```bash
