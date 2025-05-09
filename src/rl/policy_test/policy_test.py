@@ -20,8 +20,8 @@ parser.add_argument('--model_name', default='r4_3/r4_3_50.pt')  #   policy_dict=
 parser.add_argument('--arg_name', default='r5_1/r5_1')
 parser.add_argument('--world_name', default='custom_env.yaml')  # policy_test_world_lines.yaml
 parser.add_argument('--render', action='store_true')
-parser.add_argument('--robot_number', type=int, default='5')
-parser.add_argument('--num_episodes', type=int, default='5')
+parser.add_argument('--robot_number', type=int, default='7')
+parser.add_argument('--num_episodes', type=int, default='1')
 parser.add_argument('--dis_mode', type=int, default='3')  # 3 circle, 2 random, 5 for corridor
 parser.add_argument('--save', action='store_true')
 parser.add_argument('--full', action='store_true')
@@ -45,7 +45,7 @@ if policy_args.policy_type == 'drl':
     fname_model = model_base_path + '/' + policy_args.model_name 
     policy_name = 'drl_rvo'
     
-env = VOEnv('custom_env.yaml', 'lidar')
+env = VOEnv('custom_env.yaml', 'lidar', save_ani=True, display=False)
 
 policy_name = policy_name + '_' + str(policy_args.robot_number) + '_dis' + str(policy_args.dis_mode)
 
