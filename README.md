@@ -1,6 +1,7 @@
 # Learning to Avoid: Decentralized Multi-Robot Navigation from LiDAR Using PPO and Reciprocal Velocity Obstacles
 
 This project builds on top of the [irsim](https://github.com/robot-perception-group/irsim) simulator. The original simulator was cloned and extended to support reinforcement learning (RL) for multi-robot navigation tasks.
+Paper: [Learning to Avoid](https://dr.ntu.edu.sg/entities/publication/eb596c39-a3cc-4389-89b3-0d169a28119f)
 
 ## 🚀 Setup Instructions
 
